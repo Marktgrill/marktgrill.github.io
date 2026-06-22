@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Speisekarte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn active"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main style="max-width: 1200px; width: 100%;">
+        <h1>Unsere <span class="highlight">Speisekarte</span></h1>
+        <p class="subtitle" style="margin-bottom: 10px;">Entdecke unsere mit Liebe zubereiteten Gerichte.</p>
+        <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 40px;">Bei Fragen zu Allergenen und Zusatzstoffen in unseren Speisen wenden Sie sich bitte an unser Personal.</p>
+        
+        <h2 style="width: 100%; text-align: left; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; margin-top: 20px;"><i class="fa-solid fa-burger highlight"></i> Im Brot & Gerollt</h2>
+        <div class="grid-container">
+            <div class="card">
+                <h3>Puten Döner Tasche <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Chicken Tasche <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg</p>
+            </div>
+            <div class="card">
+                <h3>Sucuk Tasche <span class="price">8,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Ketchup</p>
+            </div>
+            <div class="card">
+                <h3>Nugget Tasche <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg</p>
+            </div>
+            <div class="card">
+                <h3>Lahmacun Putenfleisch <span class="price">8,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Dürüm Putenfleisch <span class="price">8,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+        </div>
+
+        <h2 style="width: 100%; text-align: left; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px;"><i class="fa-solid fa-leaf highlight" style="color: #4CAF50;"></i> Vegetarisch</h2>
+        <div class="grid-container">
+            <div class="card">
+                <h3>Falafel Tasche <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Dürüm Falafel <span class="price">8,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Lahmacun Salat <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Dürüm Salat <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Salat Tasche <span class="price">7,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+            <div class="card">
+                <h3>Salat Teller <span class="price">klein 8,00 € / groß 10,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate</p>
+            </div>
+        </div>
+
+        <h2 style="width: 100%; text-align: left; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px;"><i class="fa-solid fa-utensils highlight"></i> Tellergerichte</h2>
+        <div class="grid-container">
+            <div class="card">
+                <h3>Puten Döner Teller <span class="price">klein 10,50 € / groß 12,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes</p>
+            </div>
+            <div class="card">
+                <h3>Hähnchen Schnitzel Teller <span class="price">11,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes</p>
+            </div>
+            <div class="card">
+                <h3>Falafel Teller <span class="price">11,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes</p>
+            </div>
+        </div>
+
+        <h2 style="width: 100%; text-align: left; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px;"><i class="fa-solid fa-box-open highlight"></i> Boxen & Snacks</h2>
+        <div class="grid-container">
+            <div class="card">
+                <h3>Puten Pomm Box / Salat Box <span class="price">klein 6,50 € / groß 7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Putenfleisch, Pommes oder Salat mit Fleisch ohne Sauce</p>
+            </div>
+            <div class="card">
+                <h3>Puten Pomm Döner <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Pommes und Fleisch ohne Sauce</p>
+            </div>
+            <div class="card">
+                <h3>Pommes Tasche <span class="price">6,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Pommes im Brot ohne Sauce</p>
+            </div>
+            <div class="card">
+                <h3>Kiddy Box <span class="price">7,50 €</span></h3>
+                <p style="font-size: 0.95rem;">Pommes und Nuggets oder Pommes Putenfleisch</p>
+            </div>
+            <div class="card">
+                <h3>Pommes <span class="price">klein 3,50 € / groß 4,00 €</span></h3>
+                <p style="font-size: 0.95rem;">Knusprige Pommes frites</p>
+            </div>
+        </div>
+
+        <h2 style="width: 100%; text-align: left; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; margin-top: 40px;"><i class="fa-solid fa-glass-water highlight"></i> Extras & Getränke</h2>
+        <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">Saucen & Extras</h3>
+                <ul style="list-style: none; padding: 0; line-height: 1.8;">
+                    <li>Ketchup <span style="float: right;">0,50 €</span></li>
+                    <li>Majonäse <span style="float: right;">0,50 €</span></li>
+                    <li>Jupi Sauce <span style="float: right;">0,50 €</span></li>
+                    <li>Nuggets Stk. <span style="float: right;">0,70 €</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">Getränke <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.7;">(Zzgl. Pfand)</span></h3>
+                <ul style="list-style: none; padding: 0; line-height: 1.8;">
+                    <li>Ayran (0,25l) <span style="float: right;">2,00 €</span></li>
+                    <li>Gazoz (0,33l) <span style="float: right;">2,50 €</span></li>
+                    <li>Exotica (0,33l) <span style="float: right;">3,50 €</span></li>
+                    <li>Softdrink (0,33l) <span style="float: right;">3,50 €</span></li>
+                    <li>Vitamalz (0,33l) <span style="float: right;">2,50 €</span></li>
+                    <li>Richard Sun <span style="float: right;">3,50 €</span></li>
+                </ul>
+            </div>
+        </div>
+	<footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

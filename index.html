@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill Ennigerloh | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Versteckt die Funken-Animation auf der Startseite */
+        #bg-canvas {
+            display: none !important; 
+        }
+
+        /* Video Background Styling */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; /* Sorgt dafür, dass das Video den ganzen Bildschirm füllt */
+            z-index: -2;
+            filter: grayscale(100%); /* Macht das Video Schwarz-Weiß */
+            opacity: 0.3; /* Dimmt das Video ab, damit der Text lesbar bleibt */
+            pointer-events: none; /* Verhindert, dass man aus Versehen auf das Video klickt */
+        }
+    </style>
+</head>
+<body>
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="back_index.mp4" type="video/mp4">
+    </video>
+
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span>
+        </div>
+        <a href="index.html" class="nav-btn active"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main>
+        <h1>Willkommen beim <br><span class="highlight">Marktgrill Ennigerloh</span></h1>
+        <p class="subtitle">Moderne Grillkultur trifft auf traditionellen Geschmack. Erlebe den besten Döner, frische Salate und herzhafte Snacks direkt im Herzen von Ennigerloh.</p>
+        
+        <div class="grid-container" style="margin-top: 20px;">
+            <div class="card">
+                <h3><i class="fa-solid fa-leaf"></i> Täglich Frisch</h3>
+                <p>Unser Gemüse wird knackig frisch geschnitten und unser Fleisch sorgfältig ausgewählt.</p>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fa-solid fa-bowl-food"></i> Hausgemachte Saucen</h3>
+                <p>Tzatziki, Cocktail oder Scharf? Unsere Saucen rühren wir nach eigenem Rezept täglich frisch an – für den perfekten Geschmack.</p>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-bread-slice"></i> Knuspriges Brot</h3>
+                <p>Immer warm und perfekt getoastet. Die ideale Basis, damit dein Döner bis zum letzten Bissen ein Genuss bleibt.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <a href="speisekarte.html" class="nav-btn" style="background: var(--accent-color); color: white; justify-content: center; width: 220px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);">
+                Speisekarte ansehen
+            </a>
+        </div>
+	<footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+
+    <script>
+        // Verhindert unnötige Canvas-Berechnungen, wenn wir das Video zeigen
+        if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+            const oldAnimate = window.animate;
+            window.animate = function() {
+                // Überschreibt die Animationsschleife aus script.js auf dieser Seite
+                return; 
+            };
+        }
+    </script>
+</body>
+</html>

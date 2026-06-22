@@ -1,0 +1,235 @@
+:root[data-theme="light"] {
+    --bg-color: #f8f5f2;
+    --text-color: #2b2b2b;
+    --sidebar-bg: rgba(255, 255, 255, 0.8);
+    --accent-color: #e63946; /* Appetitliches Grill-Rot */
+    --card-bg: rgba(255, 255, 255, 0.6);
+    --border-color: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #fdfdfd;
+    --sidebar-bg: rgba(25, 25, 25, 0.8);
+    --accent-color: #ff5722; /* Feuriges Orange */
+    --card-bg: rgba(40, 40, 40, 0.6);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* --- CONTROLS & SIDEBAR --- */
+.header-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.icon-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+}
+
+.menu-trigger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+}
+
+.sidebar {
+    width: 280px;
+    height: 100vh;
+    position: sticky; /* <-- DAS IST NEU */
+    top: 0;           /* <-- DAS IST NEU */
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border-color);
+    padding: 100px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: width 0.4s, transform 0.4s;
+    z-index: 999;
+    flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+    width: 85px;
+}
+
+.sidebar.collapsed .nav-text, .sidebar.collapsed .logo-text {
+    display: none;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    white-space: nowrap;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-btn:hover, .nav-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.nav-icon {
+    width: 24px;
+    text-align: center;
+}
+
+/* --- MAIN CONTENT --- */
+main {
+    flex-grow: 1;
+    padding: 80px 40px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.highlight {
+    color: var(--accent-color);
+}
+
+p.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* --- CARDS & GRIDS --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: left;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+}
+
+.card h3 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 1.2rem;
+    float: right;
+}
+
+/* --- FORMS --- */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+button.submit-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        width: 100% !important;
+        transform: translateX(-100%);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .sidebar .nav-text { display: block !important; }
+    main { padding: 100px 20px 20px; }
+}

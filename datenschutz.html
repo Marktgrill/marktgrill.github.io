@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Datenschutz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main style="max-width: 800px; width: 100%; text-align: left; align-items: flex-start;">
+        <h1 style="text-align: left;">Datenschutz&shy;erklärung</h1>
+        
+        <div class="card" style="margin-top: 20px; width: 100%;">
+            <h3 style="margin-bottom: 10px;">1. Datenschutz auf einen Blick</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                <strong>Allgemeine Hinweise</strong><br>
+                Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
+            </p>
+
+            <h3 style="margin-bottom: 10px;">2. Verantwortliche Stelle</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br><br>
+                <strong>Marktgrill Ennigerloh</strong><br>
+                Ali Avcil<br>
+                Marktplatz 1<br>
+                59320 Ennigerloh<br><br>
+                Telefon: 02524 123456<br>
+                E-Mail: info@marktgrill.de
+            </p>
+
+            <h3 style="margin-bottom: 10px;">3. Datenerfassung auf dieser Website</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                <strong>Server-Log-Dateien</strong><br>
+                Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp und Browserversion, verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners, Uhrzeit der Serveranfrage, IP-Adresse. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.
+            </p>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                <strong>Kontaktformular</strong><br>
+                Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+            </p>
+
+            <h3 style="margin-bottom: 10px;">4. Plugins und Tools</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                <strong>Google Maps</strong><br>
+                Diese Seite nutzt über eine API den Kartendienst Google Maps. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Zur Nutzung der Funktionen von Google Maps ist es notwendig, Ihre IP-Adresse zu speichern. Diese Informationen werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert. Der Anbieter dieser Seite hat keinen Einfluss auf diese Datenübertragung.
+            </p>
+
+            <h3 style="margin-bottom: 10px;">5. Ihre Rechte</h3>
+            <p style="line-height: 1.6;">
+                Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.
+            </p>
+        </div>
+
+        <!-- FOOTER -->
+        <footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--accent-color); text-decoration: none;">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Catering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Spezifisches Styling nur für die Catering-Seite (Video-Hintergrund) -->
+    <style>
+        /* Versteckt die Funken-Animation auf dieser Seite */
+        #bg-canvas {
+            display: none !important; 
+        }
+
+        /* Video Background Styling */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; 
+            z-index: -2;
+            filter: grayscale(100%); 
+            opacity: 0.3; 
+            pointer-events: none; 
+        }
+    </style>
+</head>
+<body>
+    <!-- Das Hintergrundvideo -->
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="back_catering.mp4" type="video/mp4">
+    </video>
+
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn active"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main>
+        <h1>Dein Event, <span class="highlight">Unser Grill</span></h1>
+        <p class="subtitle">Egal ob Firmenfeier, Geburtstag oder Vereinsfest in Ennigerloh und Umgebung – wir bringen den Geschmack zu dir.</p>
+        
+        <div class="grid-container">
+            <div class="card">
+                <h3><i class="fa-solid fa-box-open"></i> Buffet-Service</h3>
+                <p>Wir stellen dir ein individuelles Buffet aus Dönerfleisch, Falafel, frischen Salaten und Saucen zusammen.</p>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-truck"></i> Live-Cooking</h3>
+                <p>Miete unser Team für dein Event! Wir schneiden und servieren direkt frisch vor Ort.</p>
+            </div>
+        </div>
+
+        <!-- Bereich für die Kontaktaufnahme -->
+        <div class="card" style="margin-top: 40px; max-width: 800px; text-align: center; border-color: var(--accent-color);">
+            <h3 style="margin-bottom: 15px;"><i class="fa-regular fa-handshake"></i> Interesse geweckt?</h3>
+            <p style="line-height: 1.6; margin-bottom: 0;">
+                Jedes Event ist einzigartig! Lass uns die Details, Mengen und Sonderwünsche gemeinsam abstimmen. 
+                Melde dich ganz unverbindlich über unser Kontaktformular, schreibe uns eine E-Mail, greif zum Hörer oder sprich uns einfach bei deinem nächsten Besuch direkt im Imbiss an. Wir beraten dich gerne!
+            </p>
+            <div style="margin-top: 25px; display: flex; justify-content: center;">
+                <a href="contact.html" class="nav-btn" style="background: var(--accent-color); color: white; justify-content: center; width: 250px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);">
+                    Jetzt Kontakt aufnehmen
+                </a>
+            </div>
+        </div>
+	<footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+
+    <!-- Fix: Stoppt die Canvas-Animation und steuert das Video -->
+    <script>
+        if (window.location.pathname.includes('catering.html')) {
+            const oldAnimate = window.animate;
+            window.animate = function() { return; };
+        }
+
+        // --- HIER WIRD DAS VIDEO LANGSAMER GEMACHT ---
+        // 0.5 bedeutet halbe Geschwindigkeit. 1.0 ist normal.
+        const backgroundVideo = document.getElementById('bg-video');
+        if (backgroundVideo) {
+            backgroundVideo.playbackRate = 0.5;
+        }
+    </script>
+</body>
+</html>

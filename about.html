@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Über uns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn active"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main>
+        <h1>Das Herz von <span class="highlight">Ennigerloh</span></h1>
+        <p class="subtitle">Wir sind nicht einfach nur ein Imbiss. Wir sind ein Treffpunkt für guten Geschmack und Qualität.</p>
+        
+        <!-- Bereich: Vorstellung Inhaber -->
+        <div class="card" style="max-width: 800px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
+            <div style="flex: 1; min-width: 250px;">
+                <h3 style="margin-bottom: 10px; font-size: 1.5rem;"><i class="fa-solid fa-user-tie highlight"></i> Dein Gastgeber: Ali Avcil</h3>
+                <p style="line-height: 1.6; margin-bottom: 0;">
+                    Hallo! Ich bin <strong>Ali Avcil</strong>, der stolze Betreiber des Marktgrills. Schon seit <strong>[XX] Jahren</strong> stehe ich mit absolutem Herzblut hinter dem Grill. Für mich ist das hier nicht einfach nur ein Job, sondern eine echte Leidenschaft. Es macht mich jeden Tag aufs Neue glücklich, die Menschen in Ennigerloh mit frischen, ehrlichen Gerichten zu versorgen und in zufriedene Gesichter zu blicken. Qualität, die man schmeckt – das ist mein Versprechen an euch!
+                </p>
+            </div>
+            
+            <!-- Platzhalter für ein Profilbild von Ali -->
+            <div style="width: 150px; height: 150px; border-radius: 50%; background: var(--border-color); display: flex; justify-content: center; align-items: center; font-size: 4rem; color: var(--accent-color); margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid var(--accent-color); overflow: hidden;">
+                <!-- Wenn du ein echtes Foto hast, tausche das Icon einfach gegen einen img-Tag aus: -->
+                <!-- <img src="ali.jpg" alt="Ali Avcil" style="width: 100%; height: 100%; object-fit: cover;"> -->
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </div>
+
+        <!-- Bereich: Philosophie -->
+        <div class="card" style="max-width: 800px; margin-top: 30px;">
+            <h3><i class="fa-solid fa-star highlight"></i> Unsere Philosophie</h3>
+            <p style="margin-top: 10px; line-height: 1.6;">
+                Beim Marktgrill legen wir größten Wert auf Authentizität und Frische. Vom sorgfältig ausgewählten und marinierten Fleisch bis hin zu den Saucen, die wir nach eigenem Familienrezept täglich frisch herstellen – bei uns schmeckst du den Unterschied. Wir sind stolz darauf, ein fester Teil der Gemeinschaft in Ennigerloh zu sein. Dein Genuss ist unser Antrieb!
+            </p>
+        </div>
+	<footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

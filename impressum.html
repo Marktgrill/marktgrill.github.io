@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Impressum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main style="max-width: 800px; width: 100%; text-align: left; align-items: flex-start;">
+        <h1 style="text-align: left;">Impressum</h1>
+        
+        <div class="card" style="margin-top: 20px; width: 100%;">
+            <h3 style="margin-bottom: 15px;">Angaben gemäß § 5 TMG</h3>
+            <p style="line-height: 1.6;">
+                <strong>Marktgrill Ennigerloh</strong><br>
+                Ali Avcil<br>
+                Marktplatz 1<br>
+                59320 Ennigerloh
+            </p>
+
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">Kontakt</h3>
+            <p style="line-height: 1.6;">
+                Telefon: 02524 123456<br>
+                E-Mail: info@marktgrill.de
+            </p>
+
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">Umsatzsteuer-ID</h3>
+            <p style="line-height: 1.6;">
+                Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>
+                DE XXX XXX XXX <!-- HIER DEINE ECHTE STEUER-ID EINTRAGEN, FALLS VORHANDEN -->
+            </p>
+
+            <h3 style="margin-top: 25px; margin-bottom: 15px;">Verbraucher­streit­beilegung / Universal­schlichtungs­stelle</h3>
+            <p style="line-height: 1.6;">
+                Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+            </p>
+        </div>
+
+        <!-- FOOTER -->
+        <footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--accent-color); text-decoration: none;">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

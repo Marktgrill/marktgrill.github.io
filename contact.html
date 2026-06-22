@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Kontakt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <button class="icon-btn menu-trigger" onclick="toggleMenu()">☰</button>
+    <div class="header-controls">
+        <button class="icon-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container"><i class="fa-solid fa-fire highlight"></i> <span class="logo-text">Marktgrill</span></div>
+        <a href="index.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-text">Home</span></a>
+        <a href="speisekarte.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-utensils"></i></span><span class="nav-text">Speisekarte</span></a>
+        <a href="catering.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span><span class="nav-text">Catering</span></a>
+        <a href="about.html" class="nav-btn"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-text">Über uns</span></a>
+        <a href="contact.html" class="nav-btn active"><span class="nav-icon"><i class="fa-solid fa-envelope"></i></span><span class="nav-text">Kontakt</span></a>
+    </nav>
+
+    <main style="width: 100%; max-width: 1200px;">
+        <h1>Sag <span class="highlight">Hallo!</span></h1>
+        <p class="subtitle">Du möchtest etwas vorbestellen oder hast Fragen zu unserem Catering? Schreib uns, ruf an oder komm direkt vorbei!</p>
+        
+        <!-- ZWEI-SPALTEN-LAYOUT: Links Infos, Rechts Formular -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; width: 100%; margin-bottom: 60px;">
+            
+            <!-- LINKE SPALTE: Kontakt-Infos untereinander -->
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card" style="display: flex; align-items: center; gap: 20px; padding: 40px;">
+                    <i class="fa-solid fa-phone highlight" style="font-size: 2rem; width: 40px; text-align: center;"></i>
+                    <div>
+                        <h3 style="margin-bottom: 5px; font-size: 1.2rem;">Telefon</h3>
+                        <p style="margin: 0;">02524 123456</p>
+                    </div>
+                </div>
+                
+                <div class="card" style="display: flex; align-items: center; gap: 20px; padding: 40px;">
+                    <i class="fa-solid fa-envelope highlight" style="font-size: 2rem; width: 40px; text-align: center;"></i>
+                    <div>
+                        <h3 style="margin-bottom: 5px; font-size: 1.2rem;">E-Mail</h3>
+                        <p style="margin: 0;">siehe Kontaktformular</p>
+                    </div>
+                </div>
+                
+                <div class="card" style="display: flex; align-items: center; gap: 20px; padding: 40px;">
+                    <i class="fa-solid fa-location-dot highlight" style="font-size: 2rem; width: 40px; text-align: center;"></i>
+                    <div>
+                        <h3 style="margin-bottom: 5px; font-size: 1.2rem;">Adresse</h3>
+                        <p style="margin: 0;">Marktplatz 1<br>59320 Ennigerloh</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECHTE SPALTE: Kontaktformular -->
+            <div class="card" style="padding: 30px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin-bottom: 20px; text-align: center;">Schreib uns eine Nachricht</h3>
+                <form class="contact-form" style="width: 100%; max-width: 100%;">
+                    <input type="text" placeholder="Dein Name" required style="margin-bottom: 15px;">
+                    <input type="email" placeholder="Deine E-Mail" required style="margin-bottom: 15px;">
+                    <textarea rows="5" placeholder="Deine Nachricht an den Marktgrill..." required style="margin-bottom: 15px;"></textarea>
+                    <button type="submit" class="submit-btn" style="width: 100%;">Nachricht Senden</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- TRENNER-TEXT -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2><i class="fa-solid fa-map-location-dot highlight"></i> Hier findest du uns</h2>
+            <p style="opacity: 0.8; margin-top: 10px;">Komm auf einen frischen Döner oder Snack vorbei. Wir freuen uns auf deinen Besuch!</p>
+        </div>
+
+        <!-- Google Maps in voller Breite (100%) -->
+        <div style="width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1197.630665933639!2d8.024173798939179!3d51.83451657876943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41701c7c1b88d2cd%3A0xc2660e98c3dbb481!2sMarktgrill%20%2F%20Antep!5e0!3m2!1sde!2sde!4v1782153991334!5m2!1sde!2sde" 
+                width="100%" 
+                height="450" 
+                style="border:0; display: block;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+	<footer style="margin-top: 80px; padding-top: 30px; padding-bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.7; flex-wrap: wrap; gap: 15px;">
+            <div>&copy; 2026 Marktgrill Ennigerloh</div>
+            <div style="display: flex; gap: 20px;">
+                <a href="impressum.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Impressum</a>
+                <a href="datenschutz.html" style="color: var(--text-color); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-color)'">Datenschutz</a>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
