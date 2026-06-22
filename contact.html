@@ -62,12 +62,12 @@
             <!-- RECHTE SPALTE: Kontaktformular -->
             <div class="card" style="padding: 30px; display: flex; flex-direction: column; justify-content: center;">
                 <h3 style="margin-bottom: 20px; text-align: center;">Schreib uns eine Nachricht</h3>
-                <form class="contact-form" style="width: 100%; max-width: 100%;">
-                    <input type="text" placeholder="Dein Name" required style="margin-bottom: 15px;">
-                    <input type="email" placeholder="Deine E-Mail" required style="margin-bottom: 15px;">
-                    <textarea rows="5" placeholder="Deine Nachricht an den Marktgrill..." required style="margin-bottom: 15px;"></textarea>
-                    <button type="submit" class="submit-btn" style="width: 100%;">Nachricht Senden</button>
-                </form>
+                <form class="contact-form" action="https://formspree.io/f/mpqgzbgo" method="POST" style="width: 100%; max-width: 100%;">
+			    <input type="text" name="Name" placeholder="Dein Name" required style="margin-bottom: 15px;">
+			    <input type="email" name="Email" placeholder="Deine E-Mail" required style="margin-bottom: 15px;">
+			    <textarea name="Nachricht" rows="5" placeholder="Deine Nachricht an den Marktgrill..." required style="margin-bottom: 15px;"></textarea>
+			    <button type="submit" class="submit-btn" style="width: 100%;">Nachricht Senden</button>
+			</form>
             </div>
 
         </div>
