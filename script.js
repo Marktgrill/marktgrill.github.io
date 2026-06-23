@@ -75,6 +75,69 @@ function animate() {
 }
 
 
+// Schüttel-Easter-Egg
+let shakeThreshold = 15; // Wie stark muss geschüttelt werden?
+let lastX, lastY, lastZ;
+
+window.addEventListener('devicemotion', (event) => {
+    let acceleration = event.accelerationIncludingGravity;
+    let x = acceleration.x;
+    let y = acceleration.y;
+    let z = acceleration.z;
+
+    if (lastX && lastY && lastZ) {
+        let delta = Math.abs(x - lastX) + Math.abs(y - lastY) + Math.abs(z - lastZ);
+        if (delta > shakeThreshold) {
+            // HIER PASSIERT DIE MAGIE
+            triggerEasterEgg();
+        }
+    }
+    lastX = x; lastY = y; lastZ = z;
+});
+
+function triggerEasterEgg() {
+    // Beispiel: Farben invertieren oder ein Alert
+    document.body.style.filter = "invert(1)"; 
+    setTimeout(() => { document.body.style.filter = "none"; }, 1000);
+}
+
+// Konfetti-Geste (zwei Finger nach oben wischen)
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) { touchStartY = e.touches[0].clientY; }
+});
+
+document.addEventListener('touchend', (e) => {
+    if (e.changedTouches.length === 2) {
+        let touchEndY = e.changedTouches[0].clientY;
+        if (touchStartY - touchEndY > 100) { // Wenn mehr als 100px gewischt wurde
+            triggerKonfetti();
+        }
+    }
+});
+
+function triggerKonfetti() {
+    // Falls noch nicht vorhanden, lädt dies die Konfetti-Library
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js";
+    script.onload = () => {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    };
+    document.body.appendChild(script);
+}
+
+// 3D-Neigungs-Effekt für das Logo
+window.addEventListener('deviceorientation', (event) => {
+    const logo = document.getElementById('secret-logo');
+    if (logo) {
+        // gamma ist die Neigung links/rechts, beta ist vor/zurück
+        let x = event.gamma; 
+        let y = event.beta;
+        // Wir begrenzen den Effekt, damit es nicht "ausflippt"
+        logo.style.transform = `perspective(500px) rotateY(${x / 5}deg) rotateX(${-y / 5}deg)`;
+    }
+});
+
 // Easter Egg Trigger: 5 Klicks auf das Logo
 const secretLogo = document.getElementById('secret-logo');
 let clickCount = 0;
