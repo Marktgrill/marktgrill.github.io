@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgrill | Secret Area</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Spezielles Styling für das Spiel */
+        #bg-canvas { display: none !important; }
+        
+        .artist-signature {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 20px;
+        }
+        
+        .artist-signature h2 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--accent-color);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            font-weight: bold;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #game-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body style="justify-content: center; align-items: center; min-height: 100vh;">
+    
+    <main style="max-width: 800px; width: 100%; text-align: center; padding: 20px;">
+        
+        <div class="card" style="padding: 40px;">
+            <div class="artist-signature">
+                <h2>Designed & Coded by Diyar</h2>
+                <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6;">
+                    Ein Meisterwerk digitaler Handwerkskunst. Entwickelt von einem brillanten Geist, der nicht nur sauberen Code schreibt, sondern Erlebnisse erschafft. Bleib hungrig, bleib innovativ!
+                </p>
+            </div>
+
+            <!-- Das Döner-Spiel -->
+            <div id="game-container">
+                <div class="score-board">
+                    <span>Score: <span id="scoreText">0</span></span>
+                    <span style="color: var(--accent-color);">Highscore: <span id="highScoreText">0</span></span>
+                </div>
+                <canvas id="gameCanvas" width="600" height="200"></canvas>
+                
+                <!-- Start/Game Over Screen -->
+                <div id="game-overlay">
+                    <h3 id="overlay-title" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-color);">Döner Run</h3>
+                    <p>Drücke <strong>Leertaste</strong> oder tippe hier zum Springen!</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; display: flex; justify-content: center;">
+                <a href="index.html" class="nav-btn" style="background: var(--card-bg); border: 1px solid var(--border-color); width: 200px; justify-content: center; font-weight: bold;">
+                    <i class="fa-solid fa-arrow-left"></i> Zurück zur Startseite
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- DÖNER GAME LOGIC ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const overlay = document.getElementById('game-overlay');
+        const overlayTitle = document.getElementById('overlay-title');
+        const scoreText = document.getElementById('scoreText');
+        const highScoreText = document.getElementById('highScoreText');
+
+        let isPlaying = false;
+        let score = 0;
+        let highScore = localStorage.getItem('doenerHighScore') || 0;
+        highScoreText.innerText = highScore;
+
+        // Spielfiguren (Emojis)
+        const playerEmoji = '🥙';
+        const obstacleEmoji = '🥤';
+
+        // Spieler-Eigenschaften
+        let player = { x: 50, y: 150, width: 40, height: 40, velocityY: 0, isJumping: false };
+        let gravity = 0.6;
+        let jumpPower = -10;
+
+        // Hindernis-Eigenschaften
+        let obstacles = [];
+        let gameSpeed = 5;
+        let frameCount = 0;
+        let animationId;
+
+        function resetGame() {
+            player.y = 150;
+            player.velocityY = 0;
+            obstacles = [];
+            score = 0;
+            gameSpeed = 5;
+            frameCount = 0;
+            isPlaying = true;
+            overlay.style.display = 'none';
+            scoreText.innerText = score;
+            gameLoop();
+        }
+
+        function jump() {
+            if (!isPlaying) {
+                resetGame();
+            } else if (!player.isJumping) {
+                player.velocityY = jumpPower;
+                player.isJumping = true;
+            }
+        }
+
+        function spawnObstacle() {
+            if (frameCount % Math.floor(Math.random() * (120 - 60) + 60) === 0) {
+                obstacles.push({ x: canvas.width, y: 155, width: 30, height: 35 });
+            }
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            
+            // Highscore speichern
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('doenerHighScore', highScore);
+                highScoreText.innerText = highScore;
+            }
+
+            overlayTitle.innerText = "Game Over!";
+            overlayTitle.style.color = "red";
+            overlay.innerHTML = `<h3 style="font-size: 2rem; margin-bottom: 10px; color: #e63946;">Game Over!</h3><p>Score: ${score}</p><p>Drücke Leertaste um neu zu starten</p>`;
+            overlay.style.display = 'flex';
+        }
+
+        function gameLoop() {
+            if (!isPlaying) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            frameCount++;
+            
+            // Boden zeichnen
+            ctx.beginPath();
+            ctx.moveTo(0, 190);
+            ctx.lineTo(canvas.width, 190);
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Spieler Physik (Gravitation)
+            player.velocityY += gravity;
+            player.y += player.velocityY;
+
+            // Bodenkollision Spieler
+            if (player.y >= 150) {
+                player.y = 150;
+                player.velocityY = 0;
+                player.isJumping = false;
+            }
+
+            // Spieler (Döner) zeichnen
+            ctx.font = "40px Arial";
+            ctx.fillText(playerEmoji, player.x, player.y + 35);
+
+            // Hindernisse bewegen und zeichnen
+            spawnObstacle();
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i];
+                obs.x -= gameSpeed;
+                
+                // Ayran zeichnen
+                ctx.font = "35px Arial";
+                ctx.fillText(obstacleEmoji, obs.x, obs.y + 30);
+
+                // Kollisionsabfrage
+                if (
+                    player.x < obs.x + obs.width - 10 &&
+                    player.x + player.width - 10 > obs.x &&
+                    player.y < obs.y + obs.height - 10 &&
+                    player.y + player.height - 10 > obs.y
+                ) {
+                    gameOver();
+                }
+
+                // Hindernis aus dem Array entfernen, wenn es aus dem Bildschirm verschwindet
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    score++;
+                    scoreText.innerText = score;
+                    
+                    // Spiel wird mit der Zeit leicht schneller
+                    if (score % 10 === 0) gameSpeed += 0.5;
+                }
+            }
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // Event Listeners für Sprung (Tastatur & Touch/Maus)
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                jump();
+            }
+        });
+        document.getElementById('game-container').addEventListener('mousedown', jump);
+        document.getElementById('game-container').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            jump();
+        });
+    </script>
+</body>
+</html>
