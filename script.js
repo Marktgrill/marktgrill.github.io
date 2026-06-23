@@ -101,42 +101,6 @@ function triggerEasterEgg() {
     setTimeout(() => { emoji.style.display = 'none'; }, 5000); // 5 Sekunden
 }
 
-// Konfetti-Geste (zwei Finger nach oben wischen)
-let touchStartY = 0;
-document.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) { touchStartY = e.touches[0].clientY; }
-});
-
-document.addEventListener('touchend', (e) => {
-    if (e.changedTouches.length === 2) {
-        let touchEndY = e.changedTouches[0].clientY;
-        if (touchStartY - touchEndY > 100) { // Wenn mehr als 100px gewischt wurde
-            triggerKonfetti();
-        }
-    }
-});
-
-function triggerKonfetti() {
-    // Falls noch nicht vorhanden, lädt dies die Konfetti-Library
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js";
-    script.onload = () => {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    };
-    document.body.appendChild(script);
-}
-
-// 3D-Neigungs-Effekt für das Logo
-window.addEventListener('deviceorientation', (event) => {
-    const logo = document.getElementById('secret-logo');
-    if (logo) {
-        // gamma ist die Neigung links/rechts, beta ist vor/zurück
-        let x = event.gamma; 
-        let y = event.beta;
-        // Wir begrenzen den Effekt, damit es nicht "ausflippt"
-        logo.style.transform = `perspective(500px) rotateY(${x / 5}deg) rotateX(${-y / 5}deg)`;
-    }
-});
 
 // Easter Egg Trigger: 5 Klicks auf das Logo
 const secretLogo = document.getElementById('secret-logo');
