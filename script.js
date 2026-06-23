@@ -96,9 +96,9 @@ window.addEventListener('devicemotion', (event) => {
 });
 
 function triggerEasterEgg() {
-    // Beispiel: Farben invertieren oder ein Alert
-    document.body.style.filter = "invert(1)"; 
-    setTimeout(() => { document.body.style.filter = "none"; }, 1000);
+    const emoji = document.getElementById('confused-emoji');
+    emoji.style.display = 'block';
+    setTimeout(() => { emoji.style.display = 'none'; }, 5000); // 5 Sekunden
 }
 
 // Konfetti-Geste (zwei Finger nach oben wischen)
