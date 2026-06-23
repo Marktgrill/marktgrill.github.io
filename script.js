@@ -74,6 +74,29 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
+
+// Easter Egg Trigger: 5 Klicks auf das Logo
+const secretLogo = document.getElementById('secret-logo');
+let clickCount = 0;
+let clickTimer;
+
+if(secretLogo) {
+    secretLogo.addEventListener('click', () => {
+        clickCount++;
+        clearTimeout(clickTimer);
+        
+        if (clickCount >= 5) {
+            window.location.href = 'easteregg.html';
+        }
+
+        // Setzt den Zähler nach 1,5 Sekunden Pause wieder auf 0 zurück
+        clickTimer = setTimeout(() => {
+            clickCount = 0;
+        }, 1500);
+    });
+}
+
+
 window.addEventListener('resize', () => {
     initCanvas();
     createEmbers();
