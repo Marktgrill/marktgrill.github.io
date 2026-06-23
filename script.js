@@ -76,7 +76,7 @@ function animate() {
 
 
 // Schüttel-Easter-Egg
-let shakeThreshold = 30; // Wie stark muss geschüttelt werden?
+let shakeThreshold = 50; // Wie stark muss geschüttelt werden?
 let lastX, lastY, lastZ;
 
 window.addEventListener('devicemotion', (event) => {
