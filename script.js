@@ -98,7 +98,7 @@ window.addEventListener('devicemotion', (event) => {
 function triggerEasterEgg() {
     const emoji = document.getElementById('confused-emoji');
     emoji.style.display = 'block';
-    setTimeout(() => { emoji.style.display = 'none'; }, 3000); // 5 Sekunden
+    setTimeout(() => { emoji.style.display = 'none'; }, 2000); // 2 Sekunden
 }
 
 
