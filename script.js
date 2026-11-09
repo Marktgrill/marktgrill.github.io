@@ -14,9 +14,9 @@ function openStatus(){
 }
 
 // Theme
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);const b=document.getElementById('theme-icon');if(b)b.textContent=t==='dark'?'🌙':'☀️';try{localStorage.setItem('theme',t)}catch(e){}}
+function setTheme(t){const mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=t==='dark'?'#0d0c0b':'#f4f1ed';document.documentElement.setAttribute('data-theme',t);const b=document.getElementById('theme-icon');if(b)b.textContent=t==='dark'?'🌙':'☀️';try{localStorage.setItem('theme',t)}catch(e){}}
 function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
-function toggleMenu(){document.getElementById('mm').classList.toggle('open')}
+function toggleMenu(){const o=document.getElementById('mm').classList.toggle('open');document.body.style.overflow=o?'hidden':'';const b=document.getElementById('tab-more');if(b)b.classList.toggle('active',o||['catering.html','about.html'].includes(page))}
 
 // Header + Footer einfügen
 const page=location.pathname.split('/').pop()||'index.html';
@@ -27,18 +27,30 @@ document.body.insertAdjacentHTML('afterbegin',`
   <div class="brand" id="secret-logo"><i class="fa-solid fa-fire"></i><span>Marktgrill</span></div>
   <nav class="nav">${links()}</nav>
   <div class="tools">
-    <div class="status ${st.open?'open':'closed'}" id="status"><span class="dot"></span><span><span class="long">${st.text}</span></span></div>
+    <div class="status ${st.open?'open':'closed'}" id="status"><span class="dot"></span><span class="long">${st.text}</span><span class="short">${st.open?'Offen':'Zu'}</span></div>
     <button class="icon-btn" onclick="toggleTheme()" id="theme-icon" aria-label="Design wechseln">🌙</button>
     <button class="icon-btn burger" onclick="toggleMenu()" aria-label="Menü">☰</button>
   </div>
 </header>
 <nav class="mobile-menu" id="mm" onclick="toggleMenu()">${links()}</nav>
-<div id="confused-emoji">😵‍💫</div>`);
+<div id="confused-emoji">😵‍💫</div>
+<nav class="tabbar" aria-label="Hauptnavigation">
+  <a href="index.html" class="${page==='index.html'?'active':''}"><i class="fa-solid fa-house"></i>Home</a>
+  <a href="speisekarte.html" class="${page==='speisekarte.html'?'active':''}"><i class="fa-solid fa-utensils"></i>Karte</a>
+  <a href="tagesgericht.html" class="${page==='tagesgericht.html'?'active':''}"><i class="fa-solid fa-star"></i>Heute</a>
+  <a href="contact.html" class="${page==='contact.html'?'active':''}"><i class="fa-solid fa-envelope"></i>Kontakt</a>
+  <button id="tab-more" class="${['catering.html','about.html'].includes(page)?'active':''}" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>Mehr</button>
+</nav>
+<div class="install" id="install" hidden>
+  <div class="install-text"><strong>Marktgrill als App</strong><span id="install-sub"></span></div>
+  <button class="btn" id="install-go">Installieren</button>
+  <button class="icon-btn" id="install-x" aria-label="Schließen">✕</button>
+</div>`);
 document.querySelector('main').insertAdjacentHTML('afterend',`
 <footer class="site-footer">
   <div>&copy; 2026 Marktgrill Ennigerloh</div>
   <div>developed by <a class="dev" href="https://diyarino.github.io/">Diyar Altinses</a></div>
-  <div class="foot-links"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
+  <div class="foot-links"><a href="#" id="install-link" hidden>App installieren</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
 </footer>`);
 try{setTheme(localStorage.getItem('theme')||'dark')}catch(e){setTheme('dark')}
 
@@ -65,7 +77,7 @@ document.querySelectorAll('[data-daily]').forEach(el=>renderDaily(el,el.dataset.
 const canvas=document.getElementById('bg-canvas');
 if(canvas&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   const ctx=canvas.getContext('2d');let embers=[];
-  const init=()=>{canvas.width=innerWidth;canvas.height=innerHeight;embers=Array.from({length:70},()=>mk())};
+  const init=()=>{canvas.width=innerWidth;canvas.height=innerHeight;embers=Array.from({length:innerWidth<700?32:70},()=>mk())};
   const mk=()=>({x:Math.random()*canvas.width,y:canvas.height+Math.random()*100,s:Math.random()*2.5+1,vx:(Math.random()-.5)*1.2,vy:-(Math.random()*1.6+.4),o:Math.random()});
   (function loop(){ctx.clearRect(0,0,canvas.width,canvas.height);
     const c=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#ff5a1f';
@@ -84,10 +96,31 @@ addEventListener('devicemotion',e=>{const a=e.accelerationIncludingGravity;if(!a
   if(lx!=null&&Math.abs(a.x-lx)+Math.abs(a.y-ly)+Math.abs(a.z-lz)>50){const el=document.getElementById('confused-emoji');el.style.display='block';setTimeout(()=>el.style.display='none',2000)}
   lx=a.x;ly=a.y;lz=a.z});
 
+// Video sparen bei "Weniger Bewegung" oder Datensparmodus
+const vid=document.querySelector('.bg-video');
+if(vid&&(matchMedia('(prefers-reduced-motion: reduce)').matches||(navigator.connection&&navigator.connection.saveData)))vid.remove();
 
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
+// ===== App-Installation (PWA) =====
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
+(function(){
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  if(standalone)return;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const box=document.getElementById('install'),sub=document.getElementById('install-sub'),go=document.getElementById('install-go'),link=document.getElementById('install-link');
+  let deferred=null;
+  const dismissed=()=>{try{return Date.now()-(+localStorage.getItem('installDismissed')||0)<7*864e5}catch(e){return false}};
+  function show(){
+    if(deferred){sub.textContent='Schneller Zugriff auf Karte, Tagesgericht und Öffnungszeiten.';go.style.display=''}
+    else if(isIOS){sub.innerHTML='Tippe unten auf <i class="fa-solid fa-arrow-up-from-bracket"></i> Teilen und dann auf „Zum Home-Bildschirm“.';go.style.display='none'}
+    else return;
+    box.hidden=false;
+  }
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;link.hidden=false;if(!dismissed())setTimeout(show,5000)});
+  if(isIOS){link.hidden=false;if(!dismissed())setTimeout(show,6000)}
+  go.addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;box.hidden=true;link.hidden=true});
+  document.getElementById('install-x').addEventListener('click',()=>{box.hidden=true;try{localStorage.setItem('installDismissed',Date.now())}catch(e){}});
+  link.addEventListener('click',e=>{e.preventDefault();show()});
+  addEventListener('appinstalled',()=>{box.hidden=true;link.hidden=true});
+})();
