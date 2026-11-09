@@ -1,11 +1,11 @@
 {
   "hinweis": "Solange der Vorrat reicht.",
-  "titel": "Tavuk ",
-  "vegetarisch": true,
+  "titel": "Tavuk mit Paprika-Sahne Sauce",
+  "vegetarisch": false,
   "ausverkauft": false,
-  "beschreibung": "Knuspriges Hähnchen mit feuerrotem Blut.",
-  "preis": "90,50 €",
+  "beschreibung": "Knuspriges Hähnchen mit scharfer Sauce.",
+  "preis": "8,50 €",
   "gueltig_am": "2026-11-09",
   "aktiv": true,
-  "bild": "/images/uploads/logo.png"
+  "bild": ""
 }
