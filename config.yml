@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: DEIN-GITHUB-NAME/DEIN-REPO      # <- anpassen, z. B. ali-avcil/marktgrill
+  repo: Marktgrill/marktgrill      # <- anpassen, z. B. ali-avcil/marktgrill
   branch: main                          # <- ggf. "master"
-  base_url: https://DEIN-OAUTH-PROXY.example.workers.dev   # <- siehe Anleitung (OAuth-Proxy)
+  base_url: https://marktgrill-auth.marktgrillennigerloh.workers.dev   # <- siehe Anleitung (OAuth-Proxy)
 
 locale: de
 media_folder: "images/uploads"
