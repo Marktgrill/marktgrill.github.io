@@ -1,0 +1,28 @@
+backend:
+  name: github
+  repo: DEIN-GITHUB-NAME/DEIN-REPO      # <- anpassen, z. B. ali-avcil/marktgrill
+  branch: main                          # <- ggf. "master"
+  base_url: https://DEIN-OAUTH-PROXY.example.workers.dev   # <- siehe Anleitung (OAuth-Proxy)
+
+locale: de
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "tagesgericht"
+    label: "Tagesgericht"
+    files:
+      - label: "Tagesgericht bearbeiten"
+        name: "tagesgericht"
+        file: "tagesgericht.json"
+        format: "json"
+        fields:
+          - { label: "Tagesgericht anzeigen?", name: "aktiv", widget: "boolean", default: true, hint: "Ausschalten = Heute kein Tagesgericht" }
+          - { label: "Ausverkauft?", name: "ausverkauft", widget: "boolean", default: false }
+          - { label: "Name des Gerichts", name: "titel", widget: "string" }
+          - { label: "Beschreibung", name: "beschreibung", widget: "text" }
+          - { label: "Preis", name: "preis", widget: "string", hint: "z. B. 9,50 €" }
+          - { label: "Vegetarisch?", name: "vegetarisch", widget: "boolean", default: false }
+          - { label: "Gültig am", name: "gueltig_am", widget: "datetime", time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+          - { label: "Foto (optional)", name: "bild", widget: "image", required: false }
+          - { label: "Hinweis (optional)", name: "hinweis", widget: "string", required: false }

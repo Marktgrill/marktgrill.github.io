@@ -1,0 +1,10 @@
+{
+  "aktiv": true,
+  "ausverkauft": false,
+  "titel": "Hähnchen Schnitzel Teller",
+  "beschreibung": "Knuspriges Schnitzel mit Pommes, frischem Salat und hausgemachter Zaziki.",
+  "preis": "9,50 €",
+  "vegetarisch": false,
+  "gueltig_am": "2026-11-09",
+  "hinweis": "Solange der Vorrat reicht."
+}
