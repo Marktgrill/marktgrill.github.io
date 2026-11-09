@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: Marktgrill/marktgrill.github.io      # <- anpassen, z. B. ali-avcil/marktgrill
-  branch: main                          # <- ggf. "master"
-  base_url: https://marktgrill-auth.marktgrillennigerloh.workers.dev   # <- siehe Anleitung (OAuth-Proxy)
+  repo: Marktgrill/marktgrill.github.io
+  branch: main
+  base_url: https://marktgrill-auth.marktgrillennigerloh.workers.dev
 
 site_url: https://marktgrill.github.io
 display_url: https://marktgrill.github.io
