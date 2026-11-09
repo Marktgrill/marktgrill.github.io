@@ -4,6 +4,9 @@ backend:
   branch: main                          # <- ggf. "master"
   base_url: https://marktgrill-auth.marktgrillennigerloh.workers.dev   # <- siehe Anleitung (OAuth-Proxy)
 
+site_url: https://marktgrill.github.io
+display_url: https://marktgrill.github.io
+
 locale: de
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
