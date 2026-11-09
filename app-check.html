@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App-Check</title>
+<style>body{font:16px/1.5 system-ui;background:#111;color:#eee;padding:20px;max-width:640px;margin:auto}li{margin:10px 0;list-style:none}b{display:inline-block;width:1.6em}small{color:#aaa;display:block;margin-left:1.6em}</style></head>
+<body><h2>Marktgrill App-Check</h2><ul id="o"></ul><p><small>Nach dem Test bitte die Datei app-check.html wieder löschen.</small></p>
+<script>
+const o=document.getElementById('o');
+const add=(ok,t,hint)=>o.insertAdjacentHTML('beforeend',`<li><b>${ok?'✅':'❌'}</b>${t}${!ok&&hint?`<small>${hint}</small>`:''}</li>`);
+const get=u=>fetch(u+(u.includes('?')?'&':'?')+'x='+Date.now(),{cache:'no-store'});
+(async()=>{
+ add(location.protocol==='https:','Seite läuft über https','Nur über https kann eine App installiert werden.');
+ add(matchMedia('(display-mode: standalone)').matches,'Läuft gerade als installierte App (nur bei Installation ✅)');
+ try{const h=await (await get('index.html')).text();
+  add(/rel="manifest"/.test(h),'index.html verweist auf die Manifest-Datei','Alte index.html online. Neue index.html hochladen.');
+  add(/style\.css\?v=3/.test(h),'index.html ist die neueste Version','Alte index.html online. Neue hochladen.');}catch(e){add(false,'index.html nicht lesbar')}
+ try{const m=await (await get('manifest.webmanifest')).json();
+  add(true,'manifest.webmanifest gefunden: '+m.name);
+  for(const i of m.icons){const r=await get(i.src);add(r.ok,'Icon '+i.src+' ('+i.sizes+')','Datei fehlt. Den Ordner icons hochladen.')}
+ }catch(e){add(false,'manifest.webmanifest fehlt oder ist fehlerhaft','Datei manifest.webmanifest ins Hauptverzeichnis hochladen.')}
+ try{const c=await (await get('style.css')).text();add(/\.tabbar/.test(c),'style.css ist die neueste Version','Alte style.css online. Neue hochladen (sie erzeugt sonst doppelte Menü-Buttons).')}catch(e){add(false,'style.css nicht lesbar')}
+ try{const c=await (await get('script.js')).text();add(/tabbar/.test(c)&&/beforeinstallprompt/.test(c),'script.js ist die neueste Version','Alte script.js online. Neue hochladen.')}catch(e){add(false,'script.js nicht lesbar')}
+ if('serviceWorker' in navigator){
+  try{const reg=await navigator.serviceWorker.getRegistration();add(!!reg,'Service Worker ist registriert','Alte sw.js oder Fehler. sw.js hochladen, Seite neu laden.')}catch(e){add(false,'Service Worker Fehler')}
+ }else add(false,'Browser unterstützt keinen Service Worker');
+ let fired=false;addEventListener('beforeinstallprompt',()=>{fired=true});
+ setTimeout(()=>add(fired,'Browser bietet die Installation an','Bei ❌: oben alles prüfen. Chrome braucht Manifest, Icons und https. Schon installiert? Dann erscheint es nicht erneut.'),4000);
+})();
+</script></body></html>
