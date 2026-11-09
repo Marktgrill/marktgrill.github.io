@@ -1,9 +1,9 @@
 {
   "hinweis": "Solange der Vorrat reicht.",
-  "titel": "Tavuk mit Paprika-Sahne Sauce",
-  "vegetarisch": false,
+  "titel": "Tavuk mit Paprika-Sahne Sauce 2",
+  "vegetarisch": true,
   "ausverkauft": false,
-  "beschreibung": "Knuspriges Hähnchen mit scharfer Sauce.",
+  "beschreibung": "Knuspriges Hähnchen mit scharfer Sauce.\n\nDas ist nur ein Test",
   "preis": "8,50 €",
   "gueltig_am": "2026-11-09",
   "aktiv": true,
