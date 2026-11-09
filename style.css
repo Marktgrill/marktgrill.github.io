@@ -142,29 +142,33 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent)}
 /* Moderne Social Links Leiste */
 .social-links {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 8px; /* Kleiner Abstand zwischen den Buttons, damit sie nebeneinander passen */
+  flex-wrap: nowrap; /* Verhindert das Umspringen in eine neue Zeile */
   margin-top: 20px;
+  width: 100%;
 }
 
 .social-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
+  justify-content: center;
+  gap: 8px;
+  flex: 1; /* Teilt den Platz gleichmäßig auf die 3 Buttons auf */
+  padding: 12px 10px;
   border-radius: 999px;
   background: var(--surface);
   border: 1px solid var(--line);
   color: var(--text);
-  font: 500 0.95rem var(--font-b);
+  font: 500 0.85rem var(--font-b); /* Etwas kompakter, damit der Text reinpasst */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition: all 0.25s ease;
   text-decoration: none;
+  white-space: nowrap; /* Verhindert, dass der Text umbricht */
 }
 
 .social-btn i {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 /* Hover-Effekte mit den typischen Markenfarben */
@@ -189,14 +193,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent)}
   transform: translateY(-2px);
 }
 
-/* Mobil-Optimierung: Auf kleineren Bildschirmen untereinander oder kompakt */
+/* Wichtig: Die alte Mobile-Regel für Social-Buttons löschen/überschreiben, damit sie nebeneinander bleiben */
 @media (max-width: 600px) {
   .social-links {
-    flex-direction: column;
-    width: 100%;
-  }
-  .social-btn {
-    width: 100%;
-    justify-content: center;
+    flex-direction: row !important; /* Erzwingt die Zeile auch auf Handys */
   }
 }
