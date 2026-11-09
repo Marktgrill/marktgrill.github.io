@@ -138,3 +138,65 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent)}
     display: inline-block;
   }
 }
+
+/* Moderne Social Links Leiste */
+.social-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font: 500 0.95rem var(--font-b);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.social-btn i {
+  font-size: 1.1rem;
+}
+
+/* Hover-Effekte mit den typischen Markenfarben */
+.social-btn.instagram:hover {
+  background: rgba(225, 48, 108, 0.15);
+  border-color: #e1306c;
+  color: #e1306c;
+  transform: translateY(-2px);
+}
+
+.social-btn.facebook:hover {
+  background: rgba(24, 119, 242, 0.15);
+  border-color: #1877f2;
+  color: #1877f2;
+  transform: translateY(-2px);
+}
+
+.social-btn.whatsapp:hover {
+  background: rgba(37, 211, 102, 0.15);
+  border-color: #25d366;
+  color: #25d366;
+  transform: translateY(-2px);
+}
+
+/* Mobil-Optimierung: Auf kleineren Bildschirmen untereinander oder kompakt */
+@media (max-width: 600px) {
+  .social-links {
+    flex-direction: column;
+    width: 100%;
+  }
+  .social-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
