@@ -1,3 +1,9 @@
+// ===== SOCIAL-LINKS: hier die drei Adressen eintragen (leer = Link wird ausgeblendet) =====
+const SOCIAL=[
+  {n:'WhatsApp',  s:'Kanal abonnieren', i:'fa-whatsapp',    c:'wa', u:'https://whatsapp.com/channel/0029Vb9Uptf4o7qK6NXAUl0h'},  // z. B. https://whatsapp.com/channel/XXXXXXXX
+  {n:'Instagram', s:'Folge uns',        i:'fa-instagram',   c:'ig', u:'https://www.instagram.com/marktgrill_antep/?hl=de'},  // z. B. https://www.instagram.com/DEINNAME
+  {n:'Facebook',  s:'Besuche unsere Seite', i:'fa-facebook-f', c:'fb', u:'https://www.facebook.com/marktgrill.ennigerloh/'}   // z. B. https://www.facebook.com/DEINNAME
+];
 const PAGES=[['index.html','Home'],['speisekarte.html','Speisekarte'],['tagesgericht.html','Tagesgericht'],['catering.html','Catering'],['about.html','Über uns'],['contact.html','Kontakt']];
 // Öffnungszeiten: Wochentag (0 = Sonntag) -> [von, bis] oder null = geschlossen
 const HOURS={1:['11:30','20:45'],2:['11:30','20:45'],3:['11:30','20:45'],4:['11:30','20:45'],5:['11:30','20:45'],6:['11:30','20:00'],0:null};
@@ -50,6 +56,7 @@ document.querySelector('main').insertAdjacentHTML('afterend',`
 <footer class="site-footer">
   <div>&copy; 2026 Marktgrill Ennigerloh</div>
   <div>developed by <a class="dev" href="https://diyarino.github.io/">Diyar Altinses</a></div>
+  <div class="social-mini" data-social="mini"></div>
   <div class="foot-links"><a href="#" id="install-link" hidden>App installieren</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
 </footer>`);
 try{setTheme(localStorage.getItem('theme')||'dark')}catch(e){setTheme('dark')}
@@ -123,4 +130,16 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
   document.getElementById('install-x').addEventListener('click',()=>{box.hidden=true;try{localStorage.setItem('installDismissed',Date.now())}catch(e){}});
   link.addEventListener('click',e=>{e.preventDefault();show()});
   addEventListener('appinstalled',()=>{box.hidden=true;link.hidden=true});
+})();
+
+// Social-Links einsetzen
+(function(){
+  const list=SOCIAL.filter(x=>x.u);
+  document.querySelectorAll('[data-social]').forEach(el=>{
+    if(!list.length){(el.closest('.social')||el).remove();return}
+    const cards=el.dataset.social==='cards';
+    el.innerHTML=list.map(x=>cards
+      ?`<a class="soc-card ${x.c}" href="${x.u}" target="_blank" rel="noopener"><span class="soc-ico"><i class="fa-brands ${x.i}"></i></span><span class="soc-txt"><strong>${x.n}</strong><small>${x.s}</small></span><i class="fa-solid fa-arrow-up-right-from-square soc-arrow"></i></a>`
+      :`<a class="soc-mini ${x.c}" href="${x.u}" target="_blank" rel="noopener" aria-label="${x.n}"><i class="fa-brands ${x.i}"></i></a>`).join('');
+  });
 })();
