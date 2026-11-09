@@ -1,7 +1,7 @@
 {
   "name": "Marktgrill Ennigerloh",
   "short_name": "Marktgrill",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#0d0c0b",
   "theme_color": "#ff5a1f",
