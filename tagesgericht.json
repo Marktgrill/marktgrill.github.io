@@ -1,10 +1,11 @@
 {
-  "aktiv": true,
+  "hinweis": "Solange der Vorrat reicht.",
+  "titel": "Tavuk ",
+  "vegetarisch": true,
   "ausverkauft": false,
-  "titel": "Hähnchen Schnitzel Teller",
-  "beschreibung": "Knuspriges Schnitzel mit Pommes, frischem Salat und hausgemachter Zaziki.",
-  "preis": "9,50 €",
-  "vegetarisch": false,
+  "beschreibung": "Knuspriges Hähnchen mit feuerrotem Blut.",
+  "preis": "90,50 €",
   "gueltig_am": "2026-11-09",
-  "hinweis": "Solange der Vorrat reicht."
+  "aktiv": true,
+  "bild": "/images/uploads/logo.png"
 }
