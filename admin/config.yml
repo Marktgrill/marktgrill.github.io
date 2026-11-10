@@ -13,7 +13,7 @@ public_folder: "/images/uploads"
 
 collections:
   - name: "tagesgericht"
-    label: "Tagesgericht"
+    label: "Inhalte bearbeiten"
     files:
       - label: "Tagesgericht bearbeiten"
         name: "tagesgericht"
@@ -29,3 +29,29 @@ collections:
           - { label: "Gültig am", name: "gueltig_am", widget: "datetime", time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
           - { label: "Foto (optional)", name: "bild", widget: "image", required: false }
           - { label: "Hinweis (optional)", name: "hinweis", widget: "string", required: false }
+
+      - label: "Speisekarte (Gerichte & Preise)"
+        name: "speisekarte"
+        file: "speisekarte.json"
+        format: "json"
+        fields:
+          - label: "Kategorien"
+            name: "kategorien"
+            widget: "list"
+            label_singular: "Kategorie"
+            collapsed: true
+            summary: "{{fields.titel}}"
+            fields:
+              - { label: "Überschrift", name: "titel", widget: "string" }
+              - { label: "Symbol", name: "icon", widget: "select", default: "utensils", options: ["burger", "leaf", "utensils", "box-open", "plus", "glass-water", "pizza-slice", "ice-cream", "mug-hot", "drumstick-bite", "bread-slice", "bowl-food", "fire"] }
+              - { label: "Hinweis (optional)", name: "hinweis", widget: "string", required: false }
+              - label: "Gerichte"
+                name: "gerichte"
+                widget: "list"
+                label_singular: "Gericht"
+                collapsed: true
+                summary: "{{fields.name}} – {{fields.preis}}"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "Preis", name: "preis", widget: "string", hint: "z. B. 7,50 € oder klein 8,00 € / groß 10,00 €" }
+                  - { label: "Beschreibung (optional)", name: "beschreibung", widget: "string", required: false }
