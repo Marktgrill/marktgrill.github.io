@@ -27,24 +27,12 @@
 </main>
 <script src="script.js?v=3"></script>
 <script>
-const S='Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate';
-const MENU=[
-['brot','burger','Im Brot & Gerollt','',[
- ['Puten Döner Tasche','7,50 €',S],['Chicken Tasche','7,50 €',S+' oder Majonäse Eisberg'],['Sucuk Tasche','8,00 €',S+', Ketchup'],
- ['Nugget Tasche','7,50 €',S+' oder Majonäse Eisberg'],['Lahmacun Putenfleisch','8,50 €',S],['Dürüm Putenfleisch','8,50 €',S]]],
-['vegetarisch','leaf','Vegetarisch','',[
- ['Falafel Tasche','7,50 €',S],['Dürüm Falafel','8,00 €',S],['Lahmacun Salat','7,50 €',S],['Dürüm Salat','7,50 €',S],
- ['Salat Tasche','7,00 €',S],['Salat Teller','klein 8,00 € / groß 10,00 €',S]]],
-['teller','utensils','Tellergerichte','',[
- ['Puten Döner Teller','klein 10,50 € / groß 12,50 €',S+', Pommes'],['Hähnchen Schnitzel Teller','11,00 €',S+', Pommes'],['Falafel Teller','11,00 €',S+', Pommes']]],
-['boxen','box-open','Boxen & Snacks','',[
- ['Puten Pomm Box / Salat Box','klein 6,50 € / groß 7,50 €','Putenfleisch, Pommes oder Salat mit Fleisch ohne Sauce'],['Puten Pomm Döner','7,50 €','Pommes und Fleisch ohne Sauce'],
- ['Pommes Tasche','6,50 €','Pommes im Brot ohne Sauce'],['Kiddy Box','7,50 €','Pommes und Nuggets oder Pommes Putenfleisch'],['Pommes','klein 3,50 € / groß 4,00 €','Knusprige Pommes frites']]],
-['extras','plus','Saucen & Extras','',[['Ketchup','0,50 €',''],['Majonäse','0,50 €',''],['Jupi Sauce','0,50 €',''],['Nuggets Stk.','0,70 €','']]],
-['getraenke','glass-water','Getränke','Zuzüglich Pfand.',[['Ayran (0,25l)','2,00 €',''],['Gazoz (0,33l)','2,50 €',''],['Exotica (0,33l)','3,50 €',''],['Softdrink (0,33l)','3,50 €',''],['Vitamalz (0,33l)','2,50 €',''],['Richard Sun','3,50 €','']]]
-];
-document.getElementById('menu-nav').innerHTML=MENU.map(m=>`<a class="chip" href="#${m[0]}">${m[2]}</a>`).join('');
-document.getElementById('menu').innerHTML=MENU.map(m=>`<section class="menu-section" id="${m[0]}"><h2><i class="fa-solid fa-${m[1]}"></i>${m[2]}</h2>${m[3]?`<p class="note">${m[3]}</p>`:''}<div class="menu-list">${m[4].map(i=>`<div class="item"><h3>${i[0]}</h3><span class="price">${i[1]}</span>${i[2]?`<p>${i[2]}</p>`:''}</div>`).join('')}</div></section>`).join('');
+fetch('speisekarte.json?t=' + Date.now()).then(r => r.json()).then(d => {
+  const M = d.kategorien;
+  const id = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  document.getElementById('menu-nav').innerHTML = M.map(m => `<a class="chip" href="#${id(m.titel)}">${esc(m.titel)}</a>`).join('');
+  document.getElementById('menu').innerHTML = M.map(m => `<section class="menu-section" id="${id(m.titel)}"><h2><i class="fa-solid fa-${esc(m.icon)}"></i>${esc(m.titel)}</h2>${m.hinweis ? `<p class="note">${esc(m.hinweis)}</p>` : ''}<div class="menu-list">${(m.gerichte || []).map(i => `<div class="item"><h3>${esc(i.name)}</h3><span class="price">${esc(i.preis)}</span>${i.beschreibung ? `<p>${esc(i.beschreibung)}</p>` : ''}</div>`).join('')}</div></section>`).join('');
+}).catch(() => { document.getElementById('menu').innerHTML = '<p>Die Speisekarte konnte gerade nicht geladen werden.</p>'; });
 </script>
 </body>
 </html>
