@@ -1,0 +1,181 @@
+{
+  "kategorien": [
+    {
+      "titel": "Im Brot & Gerollt",
+      "icon": "burger",
+      "gerichte": [
+        {
+          "name": "Puten Döner Tasche",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Chicken Tasche",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg"
+        },
+        {
+          "name": "Sucuk Tasche",
+          "preis": "8,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Ketchup"
+        },
+        {
+          "name": "Nugget Tasche",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg"
+        },
+        {
+          "name": "Lahmacun Putenfleisch",
+          "preis": "8,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Dürüm Putenfleisch",
+          "preis": "8,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        }
+      ]
+    },
+    {
+      "titel": "Vegetarisch",
+      "icon": "leaf",
+      "gerichte": [
+        {
+          "name": "Falafel Tasche",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Dürüm Falafel",
+          "preis": "8,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Lahmacun Salat",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Dürüm Salat",
+          "preis": "7,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Salat Tasche",
+          "preis": "7,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        },
+        {
+          "name": "Salat Teller",
+          "preis": "klein 8,00 € / groß 10,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
+        }
+      ]
+    },
+    {
+      "titel": "Tellergerichte",
+      "icon": "utensils",
+      "gerichte": [
+        {
+          "name": "Puten Döner Teller",
+          "preis": "klein 10,50 € / groß 12,50 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes"
+        },
+        {
+          "name": "Hähnchen Schnitzel Teller",
+          "preis": "11,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes"
+        },
+        {
+          "name": "Falafel Teller",
+          "preis": "11,00 €",
+          "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes"
+        }
+      ]
+    },
+    {
+      "titel": "Boxen & Snacks",
+      "icon": "box-open",
+      "gerichte": [
+        {
+          "name": "Puten Pomm Box / Salat Box",
+          "preis": "klein 6,50 € / groß 7,50 €",
+          "beschreibung": "Putenfleisch, Pommes oder Salat mit Fleisch ohne Sauce"
+        },
+        {
+          "name": "Puten Pomm Döner",
+          "preis": "7,50 €",
+          "beschreibung": "Pommes und Fleisch ohne Sauce"
+        },
+        {
+          "name": "Pommes Tasche",
+          "preis": "6,50 €",
+          "beschreibung": "Pommes im Brot ohne Sauce"
+        },
+        {
+          "name": "Kiddy Box",
+          "preis": "7,50 €",
+          "beschreibung": "Pommes und Nuggets oder Pommes Putenfleisch"
+        },
+        {
+          "name": "Pommes",
+          "preis": "klein 3,50 € / groß 4,00 €",
+          "beschreibung": "Knusprige Pommes frites"
+        }
+      ]
+    },
+    {
+      "titel": "Saucen & Extras",
+      "icon": "plus",
+      "gerichte": [
+        {
+          "name": "Ketchup",
+          "preis": "0,50 €"
+        },
+        {
+          "name": "Majonäse",
+          "preis": "0,50 €"
+        },
+        {
+          "name": "Jupi Sauce",
+          "preis": "0,50 €"
+        },
+        {
+          "name": "Nuggets Stk.",
+          "preis": "0,70 €"
+        }
+      ]
+    },
+    {
+      "titel": "Getränke",
+      "icon": "glass-water",
+      "hinweis": "Zuzüglich Pfand.",
+      "gerichte": [
+        {
+          "name": "Ayran (0,25l)",
+          "preis": "2,00 €"
+        },
+        {
+          "name": "Gazoz (0,33l)",
+          "preis": "2,50 €"
+        },
+        {
+          "name": "Exotica (0,33l)",
+          "preis": "3,50 €"
+        },
+        {
+          "name": "Softdrink (0,33l)",
+          "preis": "3,50 €"
+        },
+        {
+          "name": "Vitamalz (0,33l)",
+          "preis": "2,50 €"
+        },
+        {
+          "name": "Richard Sun",
+          "preis": "3,50 €"
+        }
+      ]
+    }
+  ]
+}
