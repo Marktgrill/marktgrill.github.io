@@ -57,7 +57,7 @@ document.querySelector('main').insertAdjacentHTML('afterend',`
   <div>&copy; 2026 Marktgrill Ennigerloh</div>
   <div>developed by <a class="dev" href="https://diyarino.github.io/">Diyar Altinses</a></div>
   <div class="social-mini" data-social="mini"></div>
-  <div class="foot-links"><a href="#" id="install-link" hidden>App installieren</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
+  <div class="foot-links"><a href="#" id="install-link" hidden>App installieren</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="admin/" rel="nofollow">Admin</a></div>
 </footer>`);
 try{setTheme(localStorage.getItem('theme')||'dark')}catch(e){setTheme('dark')}
 
