@@ -33,7 +33,7 @@ document.body.insertAdjacentHTML('afterbegin',`
   <div class="brand" id="secret-logo"><i class="fa-solid fa-fire"></i><span>Marktgrill</span></div>
   <nav class="nav">${links()}</nav>
   <div class="tools">
-    <div class="status ${st.open?'open':'closed'}" id="status"><span class="dot"></span><span class="long">${st.text}</span><span class="short">${st.open?'Offen':'Zu'}</span></div>
+    <div class="status ${st.open?'open':'closed'}" id="status"><span class="dot"></span><span class="long">${st.text}</span><span class="short">${st.open?'Geöffnet':'Geschlossen'}</span></div>
     <button class="icon-btn" onclick="toggleTheme()" id="theme-icon" aria-label="Design wechseln">🌙</button>
     <button class="icon-btn burger" onclick="toggleMenu()" aria-label="Menü">☰</button>
   </div>
