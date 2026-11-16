@@ -6,32 +6,32 @@
       "gerichte": [
         {
           "name": "Puten Döner Tasche",
-          "preis": "9,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Chicken Tasche",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg"
         },
         {
           "name": "Sucuk Tasche",
-          "preis": "8,00 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Ketchup"
         },
         {
           "name": "Nugget Tasche",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate oder Majonäse Eisberg"
         },
         {
           "name": "Lahmacun Putenfleisch",
-          "preis": "8,50 €",
+          "preis": "9,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Dürüm Putenfleisch",
-          "preis": "8,50 €",
+          "preis": "9,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         }
       ]
@@ -42,27 +42,27 @@
       "gerichte": [
         {
           "name": "Falafel Tasche",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Dürüm Falafel",
-          "preis": "8,00 €",
+          "preis": "9,00 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Lahmacun Salat",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Dürüm Salat",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
           "name": "Salat Tasche",
-          "preis": "7,00 €",
+          "preis": "8,00 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate"
         },
         {
@@ -83,12 +83,12 @@
         },
         {
           "name": "Hähnchen Schnitzel Teller",
-          "preis": "11,00 €",
+          "preis": "13,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes"
         },
         {
           "name": "Falafel Teller",
-          "preis": "11,00 €",
+          "preis": "12,50 €",
           "beschreibung": "Zaziki, Eisberg, Weißkohl, Rotkohl, Zwiebel, Tomate, Pommes"
         }
       ]
@@ -98,18 +98,18 @@
       "icon": "box-open",
       "gerichte": [
         {
-          "name": "Puten Pomm Box / Salat Box",
-          "preis": "klein 6,50 € / groß 7,50 €",
-          "beschreibung": "Putenfleisch, Pommes oder Salat mit Fleisch ohne Sauce"
-        },
-        {
           "name": "Puten Pomm Döner",
-          "preis": "7,50 €",
+          "preis": "8,50 €",
           "beschreibung": "Pommes und Fleisch ohne Sauce"
         },
         {
+          "name": "Puten Pomm Box / Salat Box",
+          "preis": "klein 7,50 € / groß 8,50 €",
+          "beschreibung": "Putenfleisch, Pommes oder Salat mit Fleisch ohne Sauce"
+        },
+        {
           "name": "Pommes Tasche",
-          "preis": "6,50 €",
+          "preis": "7,50 €",
           "beschreibung": "Pommes im Brot ohne Sauce"
         },
         {
