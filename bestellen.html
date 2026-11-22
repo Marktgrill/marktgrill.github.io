@@ -59,6 +59,26 @@
     opacity: 0.45;
     cursor: not-allowed;
   }
+  .dsgvo-note {
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.45;
+    margin-top: 4px;
+  }
+  .dsgvo-note a {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .stop-box {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #fecaca;
+    line-height: 1.55;
+  }
   .status-box {
     margin-top: 18px;
     padding: 16px;
@@ -105,6 +125,12 @@
     <h1 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Jetzt bestellen</h1>
     <p class="lead">Alle mit * markierten Felder sind Pflichtfelder. Die Rückmeldung erfolgt per E-Mail und direkt hier auf der Seite.</p>
 
+    <div id="stop-box" class="stop-box">
+      <strong><i class="fa-solid fa-circle-pause"></i> Heute keine Online-Bestellungen möglich.</strong><br>
+      Aufgrund hoher Auslastung oder einer Pause nehmen wir gerade keine Online-Bestellungen an. Ruf uns gerne direkt an unter
+      <a href="tel:+4925249293606" style="color:#fff;font-weight:700;">+49 2524 9293606</a>.
+    </div>
+
     <form id="order-form" class="form-grid" novalidate>
       <div class="field">
         <label for="kunde-name">Dein Name *</label>
@@ -121,7 +147,6 @@
       <div class="field">
         <label for="abholwunsch">Wunsch-Abholzeit (optional)</label>
         <input id="abholwunsch" type="time">
-        <div id="err-zeit" class="field-error"></div>
       </div>
 
       <div class="field">
@@ -138,6 +163,11 @@
       <button type="submit" id="submit-btn" class="btn" disabled>
         <i class="fa-solid fa-paper-plane"></i> Bestellung absenden
       </button>
+
+      <p class="dsgvo-note">
+        Mit dem Absenden stimmst du der Verarbeitung deiner Angaben zur Bestellabwicklung gemäß unserer
+        <a href="datenschutz.html">Datenschutzerklärung</a> zu.
+      </p>
     </form>
 
     <div id="status-box" class="status-box"></div>
@@ -169,6 +199,7 @@
   const db = getFirestore(app);
 
   const form = document.getElementById("order-form");
+  const stopBox = document.getElementById("stop-box");
   const submitBtn = document.getElementById("submit-btn");
   const statusBox = document.getElementById("status-box");
 
@@ -184,14 +215,20 @@
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+  onSnapshot(doc(db, "einstellungen", "shop"), (snap) => {
+    const paused = snap.exists() && snap.data().bestellstopp === true;
+    stopBox.style.display = paused ? "block" : "none";
+    form.style.display = paused ? "none" : "grid";
+  });
+
   function validateFields(showMessages = false) {
     const nameVal = nameInput.value.trim();
     const emailVal = emailInput.value.trim();
     const artikelVal = artikelInput.value.trim();
 
-    let nameOk = nameVal.length >= 2 && !/^\d+$/.test(nameVal);
-    let emailOk = emailRegex.test(emailVal);
-    let artikelOk = artikelVal.length >= 3;
+    const nameOk = nameVal.length >= 2 && !/^\d+$/.test(nameVal);
+    const emailOk = emailRegex.test(emailVal);
+    const artikelOk = artikelVal.length >= 3;
 
     if (showMessages) {
       errName.textContent = nameOk ? "" : "Bitte gib deinen Namen ein (mindestens 2 Buchstaben).";
@@ -224,13 +261,16 @@
 
       if (data.status === "neu") {
         statusBox.className = "status-box wait";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill. Lass diese Seite gerne kurz offen für das Live-Update.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill.`;
       } else if (data.status === "angenommen") {
         statusBox.className = "status-box ok";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Abholbereit um: <strong>${data.abholzeit || "schnellstmöglich"}</strong>.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Voraussichtliche Abholzeit: <strong>${data.abholzeit || "schnellstmöglich"}</strong>.`;
+      } else if (data.status === "abholbereit") {
+        statusBox.className = "status-box ok";
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} ist jetzt abholbereit!</strong><br>Du kannst sie jetzt direkt im Marktgrill abholen.`;
       } else if (data.status === "abgelehnt") {
         statusBox.className = "status-box err";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} leider abgelehnt.</strong><br>Bitte ruf uns bei Fragen kurz an.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} leider abgelehnt.</strong><br>Bitte ruf uns bei Fragen kurz an unter <a href="tel:+4925249293606" style="color:#fff;">+49 2524 9293606</a>.`;
       }
     });
   }
@@ -241,19 +281,13 @@
 
     submitBtn.disabled = true;
 
-    const kunde_name = nameInput.value.trim();
-    const kunde_kontakt = emailInput.value.trim().toLowerCase();
-    const abholwunsch = zeitInput.value.trim();
-    const artikel = artikelInput.value.trim();
-    const hinweis = hinweisInput.value.trim();
-
     try {
       const docRef = await addDoc(collection(db, "bestellungen"), {
-        kunde_name,
-        kunde_kontakt,
-        abholwunsch,
-        artikel,
-        hinweis,
+        kunde_name: nameInput.value.trim(),
+        kunde_kontakt: emailInput.value.trim().toLowerCase(),
+        abholwunsch: zeitInput.value.trim(),
+        artikel: artikelInput.value.trim(),
+        hinweis: hinweisInput.value.trim(),
         status: "neu",
         abholzeit: "",
         created_at: serverTimestamp()
@@ -266,7 +300,7 @@
     } catch (err) {
       console.error(err);
       statusBox.className = "status-box err";
-      statusBox.textContent = "Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut oder ruf uns direkt an.";
+      statusBox.textContent = "Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut oder ruf uns an.";
       validateFields(false);
     }
   });
