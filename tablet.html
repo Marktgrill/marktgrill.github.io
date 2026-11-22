@@ -11,11 +11,11 @@
 <link rel="stylesheet" href="style.css?v=3">
 <style>
   .tablet-wrap {
-    max-width: 960px;
+    max-width: 980px;
     margin: 32px auto;
-    padding: 0 18px 64px;
+    padding: 0 18px 72px;
   }
-  .login-box, .order-item, .stop-bar {
+  .login-box, .order-item, .stop-bar, .filter-bar, .stat-card {
     background: rgba(24, 22, 20, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 16px;
@@ -35,13 +35,53 @@
     color: #fff;
     font: inherit;
   }
-  .stop-bar {
-    margin-top: 18px;
+  .stop-bar, .filter-bar {
+    margin-top: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 14px;
     flex-wrap: wrap;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .stat-card {
+    padding: 16px 18px;
+  }
+  .stat-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .stat-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 13px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .filter-btn.active {
+    background: #fff;
+    color: #0d0c0b;
+    font-weight: 700;
+    border-color: #fff;
   }
   .orders-list {
     display: grid;
@@ -74,32 +114,19 @@
     margin-top: 14px;
     align-items: center;
   }
-  .btn-accept {
-    background: #3b82f6;
-    color: #fff;
+  .btn-accept, .btn-ready, .btn-reject {
     border: none;
     padding: 10px 14px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
   }
-  .btn-ready {
-    background: #22c55e;
-    color: #0d0c0b;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-reject {
-    background: #ef4444;
-    color: #fff;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
+  .btn-accept { background: #3b82f6; color: #fff; }
+  .btn-ready { background: #22c55e; color: #0d0c0b; }
+  .btn-reject { background: #ef4444; color: #fff; }
+  .order-actions button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
   .toolbar {
     display: flex;
@@ -138,6 +165,41 @@
       <button id="toggle-stop-btn" type="button" class="btn ghost">Bestell-Stopp aktivieren</button>
     </div>
 
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Bestellungen (<span id="stat-range-label">Heute</span>)</div>
+        <div class="stat-value" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ausstehend</div>
+        <div class="stat-value" id="stat-pending" style="color: #fbbf24;">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Akzeptiert</div>
+        <div class="stat-value" id="stat-accepted" style="color: #4ade80;">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Abgelehnt</div>
+        <div class="stat-value" id="stat-rejected" style="color: #f87171;">0</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group" id="range-filters">
+        <button type="button" class="filter-btn active" data-range="today">Heute</button>
+        <button type="button" class="filter-btn" data-range="week">Woche</button>
+        <button type="button" class="filter-btn" data-range="month">Monat</button>
+        <button type="button" class="filter-btn" data-range="year">Jahr</button>
+        <button type="button" class="filter-btn" data-range="all">Alle</button>
+      </div>
+
+      <div class="filter-group" id="status-filters">
+        <button type="button" class="filter-btn active" data-status="all">Alle Status</button>
+        <button type="button" class="filter-btn" data-status="active">Offen / Angenommen</button>
+        <button type="button" class="filter-btn" data-status="archive">Archiv (Abholbereit / Abgelehnt)</button>
+      </div>
+    </div>
+
     <div id="orders-list" class="orders-list"></div>
   </div>
 </main>
@@ -171,47 +233,21 @@
     measurementId: "G-ENG9C5LR8T"
   };
 
-  // Hier bei Bedarf deine EmailJS-Daten eintragen (oder den Fetch-Aufruf auf einen anderen Mail-Dienst anpassen)
-  const EMAILJS_CONFIG = {
-    publicKey: "DEIN_EMAILJS_PUBLIC_KEY",
-    serviceId: "DEIN_EMAILJS_SERVICE_ID",
-    templateId: "DEIN_EMAILJS_TEMPLATE_ID"
-  };
+  // Optionaler Endpunkt (z. B. eigener Serverless-Endpunkt für Brevo)
+  const MAIL_ENDPOINT_URL = "";
 
   async function sendOrderEmail({ toEmail, customerName, orderIdShort, statusType, pickupTime }) {
-    if (!toEmail || EMAILJS_CONFIG.publicKey.startsWith("DEIN_")) return;
-
-    let subject = "";
-    let message = "";
-
-    if (statusType === "angenommen") {
-      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} angenommen`;
-      message = `Hallo ${customerName}, deine Bestellung #${orderIdShort} wurde angenommen. Voraussichtliche Abholzeit: ${pickupTime || "schnellstmöglich"}.`;
-    } else if (statusType === "abholbereit") {
-      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} ist jetzt abholbereit`;
-      message = `Hallo ${customerName}, deine Bestellung ist jetzt abholbereit! Du kannst sie ab sofort bei uns im Marktgrill Ennigerloh abholen.`;
-    } else if (statusType === "abgelehnt") {
-      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} abgelehnt`;
-      message = `Hallo ${customerName}, leider mussten wir deine Bestellung #${orderIdShort} ablehnen. Ruf uns bei Fragen gerne unter +49 2524 9293606 an.`;
-    }
-
+    if (!toEmail || !MAIL_ENDPOINT_URL) return;
     try {
-      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      await fetch(MAIL_ENDPOINT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          service_id: EMAILJS_CONFIG.serviceId,
-          template_id: EMAILJS_CONFIG.templateId,
-          user_id: EMAILJS_CONFIG.publicKey,
-          template_params: {
-            to_email: toEmail,
-            kunde_name: customerName,
-            order_id: orderIdShort,
-            status_type: statusType,
-            abholzeit: pickupTime || "",
-            subject,
-            message
-          }
+          toEmail,
+          customerName,
+          orderIdShort,
+          statusType,
+          pickupTime: pickupTime || ""
         })
       });
     } catch (e) {
@@ -230,12 +266,29 @@
   const toggleStopBtn = document.getElementById("toggle-stop-btn");
   const stopStatusText = document.getElementById("stop-status-text");
 
+  const statRangeLabel = document.getElementById("stat-range-label");
+  const statTotal = document.getElementById("stat-total");
+  const statPending = document.getElementById("stat-pending");
+  const statAccepted = document.getElementById("stat-accepted");
+  const statRejected = document.getElementById("stat-rejected");
+
   let soundEnabled = false;
   let knownNewIds = new Set();
   let initialLoadDone = false;
   let unsubscribeOrders = null;
   let unsubscribeSettings = null;
   let currentStopState = false;
+  let allOrders = [];
+  let selectedRange = "today";
+  let selectedStatusGroup = "all";
+
+  const rangeLabels = {
+    today: "Heute",
+    week: "Woche",
+    month: "Monat",
+    year: "Jahr",
+    all: "Alle"
+  };
 
   function playBeep() {
     if (!soundEnabled) return;
@@ -277,6 +330,25 @@
     await setDoc(doc(db, "einstellungen", "shop"), { bestellstopp: nextState }, { merge: true });
   });
 
+  document.querySelectorAll("#range-filters .filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedRange = btn.getAttribute("data-range");
+      document.querySelectorAll("#range-filters .filter-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      statRangeLabel.textContent = rangeLabels[selectedRange] || "Heute";
+      updateDashboardView();
+    });
+  });
+
+  document.querySelectorAll("#status-filters .filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedStatusGroup = btn.getAttribute("data-status");
+      document.querySelectorAll("#status-filters .filter-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      updateDashboardView();
+    });
+  });
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       loginSection.style.display = "none";
@@ -296,6 +368,71 @@
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;");
+  }
+
+  function toDateObj(createdAt) {
+    if (!createdAt) return null;
+    if (typeof createdAt.toDate === "function") return createdAt.toDate();
+    const d = new Date(createdAt);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function matchesRange(order, range) {
+    if (range === "all") return true;
+    const d = toDateObj(order.created_at);
+    if (!d) return range === "today";
+
+    const now = new Date();
+    if (range === "today") {
+      return (
+        d.getFullYear() === now.getFullYear() &&
+        d.getMonth() === now.getMonth() &&
+        d.getDate() === now.getDate()
+      );
+    }
+    if (range === "year") {
+      return d.getFullYear() === now.getFullYear();
+    }
+    if (range === "month") {
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    }
+    if (range === "week") {
+      const day = now.getDay();
+      const diffToMonday = (day + 6) % 7;
+      const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - diffToMonday);
+      return d >= startOfWeek;
+    }
+    return true;
+  }
+
+  function matchesStatusGroup(order, group) {
+    const st = order.status || "neu";
+    if (group === "active") return st === "neu" || st === "angenommen";
+    if (group === "archive") return st === "abholbereit" || st === "abgelehnt";
+    return true;
+  }
+
+  function updateDashboardView() {
+    const inRange = allOrders.filter((o) => matchesRange(o, selectedRange));
+
+    let pendingCount = 0;
+    let acceptedCount = 0;
+    let rejectedCount = 0;
+
+    for (const o of inRange) {
+      const st = o.status || "neu";
+      if (st === "neu") pendingCount++;
+      else if (st === "angenommen" || st === "abholbereit") acceptedCount++;
+      else if (st === "abgelehnt") rejectedCount++;
+    }
+
+    statTotal.textContent = String(inRange.length);
+    statPending.textContent = String(pendingCount);
+    statAccepted.textContent = String(acceptedCount);
+    statRejected.textContent = String(rejectedCount);
+
+    const visibleOrders = inRange.filter((o) => matchesStatusGroup(o, selectedStatusGroup));
+    renderOrders(visibleOrders);
   }
 
   function startListening() {
@@ -327,14 +464,15 @@
       });
 
       initialLoadDone = true;
+      allOrders = items;
       if (hasBrandNewOrder) playBeep();
-      renderOrders(items);
+      updateDashboardView();
     });
   }
 
   function renderOrders(orders) {
     if (!orders.length) {
-      ordersList.innerHTML = '<div class="order-item">Noch keine Bestellungen vorhanden.</div>';
+      ordersList.innerHTML = '<div class="order-item">Keine Bestellungen für diesen Filter vorhanden.</div>';
       return;
     }
 
@@ -348,6 +486,7 @@
             <span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span>
           </div>
           <div><strong>Bestellung:</strong> ${escapeHtml(o.artikel || "")}</div>
+          ${o.gesamtpreis ? `<div><strong>Gesamtpreis:</strong> ${escapeHtml(o.gesamtpreis)}</div>` : ""}
           ${o.abholwunsch ? `<div><strong>Wunsch-Abholzeit:</strong> ${escapeHtml(o.abholwunsch)}</div>` : ""}
           ${o.hinweis ? `<div><strong>Hinweis:</strong> ${escapeHtml(o.hinweis)}</div>` : ""}
           ${o.abholzeit ? `<div><strong>Bestätigte Abholzeit:</strong> ${escapeHtml(o.abholzeit)}</div>` : ""}
@@ -368,48 +507,71 @@
       const toEmail = card.getAttribute("data-email");
       const customerName = card.getAttribute("data-name");
       const pickupInput = card.querySelector(".pickup-input");
+      const actionButtons = card.querySelectorAll(".order-actions button");
+
+      function setButtonsLocked(locked) {
+        actionButtons.forEach((b) => { b.disabled = locked; });
+      }
 
       card.querySelector('[data-action="accept"]').addEventListener("click", async () => {
-        const abholzeit = pickupInput.value.trim() || "schnellstmöglich";
-        await updateDoc(doc(db, "bestellungen", id), {
-          status: "angenommen",
-          abholzeit
-        });
-        await sendOrderEmail({
-          toEmail,
-          customerName,
-          orderIdShort,
-          statusType: "angenommen",
-          pickupTime: abholzeit
-        });
+        setButtonsLocked(true);
+        try {
+          const abholzeit = pickupInput.value.trim() || "schnellstmöglich";
+          await updateDoc(doc(db, "bestellungen", id), {
+            status: "angenommen",
+            abholzeit
+          });
+          await sendOrderEmail({
+            toEmail,
+            customerName,
+            orderIdShort,
+            statusType: "angenommen",
+            pickupTime: abholzeit
+          });
+        } catch (err) {
+          console.error(err);
+          setButtonsLocked(false);
+        }
       });
 
       card.querySelector('[data-action="ready"]').addEventListener("click", async () => {
-        const abholzeit = pickupInput.value.trim();
-        await updateDoc(doc(db, "bestellungen", id), {
-          status: "abholbereit",
-          ...(abholzeit ? { abholzeit } : {})
-        });
-        await sendOrderEmail({
-          toEmail,
-          customerName,
-          orderIdShort,
-          statusType: "abholbereit",
-          pickupTime: abholzeit
-        });
+        setButtonsLocked(true);
+        try {
+          const abholzeit = pickupInput.value.trim();
+          await updateDoc(doc(db, "bestellungen", id), {
+            status: "abholbereit",
+            ...(abholzeit ? { abholzeit } : {})
+          });
+          await sendOrderEmail({
+            toEmail,
+            customerName,
+            orderIdShort,
+            statusType: "abholbereit",
+            pickupTime: abholzeit
+          });
+        } catch (err) {
+          console.error(err);
+          setButtonsLocked(false);
+        }
       });
 
       card.querySelector('[data-action="reject"]').addEventListener("click", async () => {
-        await updateDoc(doc(db, "bestellungen", id), {
-          status: "abgelehnt"
-        });
-        await sendOrderEmail({
-          toEmail,
-          customerName,
-          orderIdShort,
-          statusType: "abgelehnt",
-          pickupTime: ""
-        });
+        setButtonsLocked(true);
+        try {
+          await updateDoc(doc(db, "bestellungen", id), {
+            status: "abgelehnt"
+          });
+          await sendOrderEmail({
+            toEmail,
+            customerName,
+            orderIdShort,
+            statusType: "abgelehnt",
+            pickupTime: ""
+          });
+        } catch (err) {
+          console.error(err);
+          setButtonsLocked(false);
+        }
       });
     });
   }
