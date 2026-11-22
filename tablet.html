@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
 <title>Bestell-Tablet | Marktgrill Ennigerloh</title>
 <meta name="theme-color" content="#0d0c0b">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -10,15 +11,15 @@
 <link rel="stylesheet" href="style.css?v=3">
 <style>
   .tablet-wrap {
-    max-width: 920px;
+    max-width: 960px;
     margin: 32px auto;
     padding: 0 18px 64px;
   }
-  .login-box, .order-item {
+  .login-box, .order-item, .stop-bar {
     background: rgba(24, 22, 20, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 16px;
-    padding: 22px;
+    padding: 20px;
   }
   .login-box {
     max-width: 420px;
@@ -33,6 +34,14 @@
     background: rgba(13, 12, 11, 0.9);
     color: #fff;
     font: inherit;
+  }
+  .stop-bar {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
   }
   .orders-list {
     display: grid;
@@ -50,12 +59,13 @@
   .badge {
     padding: 4px 10px;
     border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 700;
     text-transform: uppercase;
   }
   .badge.neu { background: #f59e0b; color: #111; }
-  .badge.angenommen { background: #22c55e; color: #111; }
+  .badge.angenommen { background: #3b82f6; color: #fff; }
+  .badge.abholbereit { background: #22c55e; color: #111; }
   .badge.abgelehnt { background: #ef4444; color: #fff; }
   .order-actions {
     display: flex;
@@ -65,10 +75,19 @@
     align-items: center;
   }
   .btn-accept {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-ready {
     background: #22c55e;
     color: #0d0c0b;
     border: none;
-    padding: 10px 16px;
+    padding: 10px 14px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
@@ -77,7 +96,7 @@
     background: #ef4444;
     color: #fff;
     border: none;
-    padding: 10px 16px;
+    padding: 10px 14px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
@@ -110,6 +129,15 @@
         <button id="logout-btn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> Abmelden</button>
       </div>
     </div>
+
+    <div class="stop-bar">
+      <div>
+        <strong><i class="fa-solid fa-ban"></i> Bestell-Stopp („Heute keine Online-Bestellungen“)</strong><br>
+        <span id="stop-status-text" style="color: rgba(255,255,255,0.75); font-size: 0.92rem;">Online-Bestellungen sind aktiv.</span>
+      </div>
+      <button id="toggle-stop-btn" type="button" class="btn ghost">Bestell-Stopp aktivieren</button>
+    </div>
+
     <div id="orders-list" class="orders-list"></div>
   </div>
 </main>
@@ -129,7 +157,8 @@
     orderBy,
     onSnapshot,
     doc,
-    updateDoc
+    updateDoc,
+    setDoc
   } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -142,6 +171,54 @@
     measurementId: "G-ENG9C5LR8T"
   };
 
+  // Hier bei Bedarf deine EmailJS-Daten eintragen (oder den Fetch-Aufruf auf einen anderen Mail-Dienst anpassen)
+  const EMAILJS_CONFIG = {
+    publicKey: "DEIN_EMAILJS_PUBLIC_KEY",
+    serviceId: "DEIN_EMAILJS_SERVICE_ID",
+    templateId: "DEIN_EMAILJS_TEMPLATE_ID"
+  };
+
+  async function sendOrderEmail({ toEmail, customerName, orderIdShort, statusType, pickupTime }) {
+    if (!toEmail || EMAILJS_CONFIG.publicKey.startsWith("DEIN_")) return;
+
+    let subject = "";
+    let message = "";
+
+    if (statusType === "angenommen") {
+      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} angenommen`;
+      message = `Hallo ${customerName}, deine Bestellung #${orderIdShort} wurde angenommen. Voraussichtliche Abholzeit: ${pickupTime || "schnellstmöglich"}.`;
+    } else if (statusType === "abholbereit") {
+      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} ist jetzt abholbereit`;
+      message = `Hallo ${customerName}, deine Bestellung ist jetzt abholbereit! Du kannst sie ab sofort bei uns im Marktgrill Ennigerloh abholen.`;
+    } else if (statusType === "abgelehnt") {
+      subject = `Marktgrill Ennigerloh: Bestellung #${orderIdShort} abgelehnt`;
+      message = `Hallo ${customerName}, leider mussten wir deine Bestellung #${orderIdShort} ablehnen. Ruf uns bei Fragen gerne unter +49 2524 9293606 an.`;
+    }
+
+    try {
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: EMAILJS_CONFIG.serviceId,
+          template_id: EMAILJS_CONFIG.templateId,
+          user_id: EMAILJS_CONFIG.publicKey,
+          template_params: {
+            to_email: toEmail,
+            kunde_name: customerName,
+            order_id: orderIdShort,
+            status_type: statusType,
+            abholzeit: pickupTime || "",
+            subject,
+            message
+          }
+        })
+      });
+    } catch (e) {
+      console.error("E-Mail-Versand fehlgeschlagen:", e);
+    }
+  }
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -150,11 +227,15 @@
   const dashboardSection = document.getElementById("dashboard-section");
   const ordersList = document.getElementById("orders-list");
   const loginError = document.getElementById("login-error");
+  const toggleStopBtn = document.getElementById("toggle-stop-btn");
+  const stopStatusText = document.getElementById("stop-status-text");
 
   let soundEnabled = false;
   let knownNewIds = new Set();
   let initialLoadDone = false;
   let unsubscribeOrders = null;
+  let unsubscribeSettings = null;
+  let currentStopState = false;
 
   function playBeep() {
     if (!soundEnabled) return;
@@ -191,6 +272,11 @@
 
   document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
+  toggleStopBtn.addEventListener("click", async () => {
+    const nextState = !currentStopState;
+    await setDoc(doc(db, "einstellungen", "shop"), { bestellstopp: nextState }, { merge: true });
+  });
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       loginSection.style.display = "none";
@@ -198,6 +284,7 @@
       startListening();
     } else {
       if (unsubscribeOrders) unsubscribeOrders();
+      if (unsubscribeSettings) unsubscribeSettings();
       loginSection.style.display = "grid";
       dashboardSection.style.display = "none";
     }
@@ -212,6 +299,17 @@
   }
 
   function startListening() {
+    unsubscribeSettings = onSnapshot(doc(db, "einstellungen", "shop"), (snap) => {
+      currentStopState = snap.exists() && snap.data().bestellstopp === true;
+      if (currentStopState) {
+        stopStatusText.textContent = "AKTIV: Auf bestellen.html steht aktuell „Heute keine Online-Bestellungen möglich“.";
+        toggleStopBtn.textContent = "Bestell-Stopp beenden";
+      } else {
+        stopStatusText.textContent = "Online-Bestellungen sind aktiv.";
+        toggleStopBtn.textContent = "Bestell-Stopp aktivieren";
+      }
+    });
+
     const q = query(collection(db, "bestellungen"), orderBy("created_at", "desc"));
     unsubscribeOrders = onSnapshot(q, (snapshot) => {
       let hasBrandNewOrder = false;
@@ -242,10 +340,11 @@
 
     ordersList.innerHTML = orders.map((o) => {
       const status = o.status || "neu";
+      const shortCode = o.id.slice(0, 5).toUpperCase();
       return `
-        <div class="order-item" data-id="${escapeHtml(o.id)}">
+        <div class="order-item" data-id="${escapeHtml(o.id)}" data-short="${escapeHtml(shortCode)}" data-email="${escapeHtml(o.kunde_kontakt || "")}" data-name="${escapeHtml(o.kunde_name || "Gast")}">
           <div class="order-top">
-            <strong>${escapeHtml(o.kunde_name || "Gast")} · ${escapeHtml(o.kunde_kontakt || "")}</strong>
+            <strong>#${escapeHtml(shortCode)} · ${escapeHtml(o.kunde_name || "Gast")} · ${escapeHtml(o.kunde_kontakt || "")}</strong>
             <span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span>
           </div>
           <div><strong>Bestellung:</strong> ${escapeHtml(o.artikel || "")}</div>
@@ -256,6 +355,7 @@
           <div class="order-actions">
             <input type="text" class="pickup-input" placeholder="Abholzeit (z. B. 18:45)" value="${escapeHtml(o.abholzeit || "")}">
             <button type="button" class="btn-accept" data-action="accept">Annehmen</button>
+            <button type="button" class="btn-ready" data-action="ready">Abholbereit</button>
             <button type="button" class="btn-reject" data-action="reject">Ablehnen</button>
           </div>
         </div>
@@ -264,6 +364,9 @@
 
     ordersList.querySelectorAll(".order-item").forEach((card) => {
       const id = card.getAttribute("data-id");
+      const orderIdShort = card.getAttribute("data-short");
+      const toEmail = card.getAttribute("data-email");
+      const customerName = card.getAttribute("data-name");
       const pickupInput = card.querySelector(".pickup-input");
 
       card.querySelector('[data-action="accept"]').addEventListener("click", async () => {
@@ -272,11 +375,40 @@
           status: "angenommen",
           abholzeit
         });
+        await sendOrderEmail({
+          toEmail,
+          customerName,
+          orderIdShort,
+          statusType: "angenommen",
+          pickupTime: abholzeit
+        });
+      });
+
+      card.querySelector('[data-action="ready"]').addEventListener("click", async () => {
+        const abholzeit = pickupInput.value.trim();
+        await updateDoc(doc(db, "bestellungen", id), {
+          status: "abholbereit",
+          ...(abholzeit ? { abholzeit } : {})
+        });
+        await sendOrderEmail({
+          toEmail,
+          customerName,
+          orderIdShort,
+          statusType: "abholbereit",
+          pickupTime: abholzeit
+        });
       });
 
       card.querySelector('[data-action="reject"]').addEventListener("click", async () => {
         await updateDoc(doc(db, "bestellungen", id), {
           status: "abgelehnt"
+        });
+        await sendOrderEmail({
+          toEmail,
+          customerName,
+          orderIdShort,
+          statusType: "abgelehnt",
+          pickupTime: ""
         });
       });
     });
