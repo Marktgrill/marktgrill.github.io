@@ -4,7 +4,15 @@ const SOCIAL=[
   {n:'Instagram', s:'Folge uns',        i:'fa-instagram',   c:'ig', u:'https://www.instagram.com/marktgrill_antep/?hl=de'},  // z. B. https://www.instagram.com/DEINNAME
   {n:'Facebook',  s:'Besuche unsere Seite', i:'fa-facebook-f', c:'fb', u:'https://www.facebook.com/marktgrill.ennigerloh/'}   // z. B. https://www.facebook.com/DEINNAME
 ];
-const PAGES=[['index.html','Home'],['speisekarte.html','Speisekarte'],['tagesgericht.html','Tagesgericht'],['catering.html','Catering'],['about.html','Über uns'],['contact.html','Kontakt']];
+const PAGES=[
+  ['index.html','Home'],
+  ['speisekarte.html','Speisekarte'],
+  ['bestellen.html','Bestellen'],
+  ['tagesgericht.html','Tagesgericht'],
+  ['catering.html','Catering'],
+  ['about.html','Über uns'],
+  ['contact.html','Kontakt']
+];
 // Öffnungszeiten: Wochentag (0 = Sonntag) -> [von, bis] oder null = geschlossen
 const HOURS={1:['11:30','20:45'],2:['11:30','20:45'],3:['11:30','20:45'],4:['11:30','20:45'],5:['11:30','20:45'],6:['11:30','20:00'],0:null};
 const DAYS=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
@@ -22,7 +30,12 @@ function openStatus(){
 // Theme
 function setTheme(t){const mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=t==='dark'?'#0d0c0b':'#f4f1ed';document.documentElement.setAttribute('data-theme',t);const b=document.getElementById('theme-icon');if(b)b.textContent=t==='dark'?'🌙':'☀️';try{localStorage.setItem('theme',t)}catch(e){}}
 function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
-function toggleMenu(){const o=document.getElementById('mm').classList.toggle('open');document.body.style.overflow=o?'hidden':'';const b=document.getElementById('tab-more');if(b)b.classList.toggle('active',o||['catering.html','about.html'].includes(page))}
+function toggleMenu(){
+  const o=document.getElementById('mm').classList.toggle('open');
+  document.body.style.overflow=o?'hidden':'';
+  const b=document.getElementById('tab-more');
+  if(b)b.classList.toggle('active',o||['catering.html','about.html','contact.html'].includes(page));
+}
 
 // Header + Footer einfügen
 const page=location.pathname.split('/').pop()||'index.html';
@@ -43,9 +56,9 @@ document.body.insertAdjacentHTML('afterbegin',`
 <nav class="tabbar" aria-label="Hauptnavigation">
   <a href="index.html" class="${page==='index.html'?'active':''}"><i class="fa-solid fa-house"></i>Home</a>
   <a href="speisekarte.html" class="${page==='speisekarte.html'?'active':''}"><i class="fa-solid fa-utensils"></i>Karte</a>
+  <a href="bestellen.html" class="${page==='bestellen.html'?'active':''}"><i class="fa-solid fa-bag-shopping"></i>Bestellen</a>
   <a href="tagesgericht.html" class="${page==='tagesgericht.html'?'active':''}"><i class="fa-solid fa-star"></i>Heute</a>
-  <a href="contact.html" class="${page==='contact.html'?'active':''}"><i class="fa-solid fa-envelope"></i>Kontakt</a>
-  <button id="tab-more" class="${['catering.html','about.html'].includes(page)?'active':''}" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>Mehr</button>
+  <button id="tab-more" class="${['catering.html','about.html','contact.html'].includes(page)?'active':''}" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>Mehr</button>
 </nav>
 <div class="install" id="install" hidden>
   <div class="install-text"><strong>Marktgrill als App</strong><span id="install-sub"></span></div>
