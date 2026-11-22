@@ -41,21 +41,42 @@
     font: inherit;
     box-sizing: border-box;
   }
+  .field input.invalid,
+  .field textarea.invalid {
+    border-color: #ef4444;
+  }
+  .field-error {
+    color: #fca5a5;
+    font-size: 0.88rem;
+    margin-top: 5px;
+    min-height: 1.1em;
+  }
   .field textarea {
     min-height: 110px;
     resize: vertical;
   }
+  #submit-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
   .status-box {
     margin-top: 18px;
-    padding: 14px 16px;
-    border-radius: 10px;
+    padding: 16px;
+    border-radius: 12px;
     display: none;
+    line-height: 1.5;
   }
   .status-box.ok {
     display: block;
     background: rgba(34, 197, 94, 0.15);
     border: 1px solid rgba(34, 197, 94, 0.45);
     color: #bbf7d0;
+  }
+  .status-box.wait {
+    display: block;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    color: #fde68a;
   }
   .status-box.err {
     display: block;
@@ -82,35 +103,39 @@
 
   <div class="order-card">
     <h1 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Jetzt bestellen</h1>
-    <p class="lead">Stelle deine Bestellung zusammen – wir melden uns direkt mit einer Abholzeit bei dir.</p>
+    <p class="lead">Alle mit * markierten Felder sind Pflichtfelder. Die Rückmeldung erfolgt per E-Mail und direkt hier auf der Seite.</p>
 
-    <form id="order-form" class="form-grid">
+    <form id="order-form" class="form-grid" novalidate>
       <div class="field">
         <label for="kunde-name">Dein Name *</label>
-        <input id="kunde-name" type="text" required placeholder="z. B. Max Mustermann">
+        <input id="kunde-name" type="text" required minlength="2" maxlength="60" placeholder="z. B. Max Mustermann">
+        <div id="err-name" class="field-error"></div>
       </div>
 
       <div class="field">
-        <label for="kunde-kontakt">E-Mail *</label>
-        <input id="kunde-kontakt" type="text" required placeholder="z. B. 0170 1234567 oder name@mail.de">
+        <label for="kunde-email">Deine E-Mail-Adresse (nur E-Mail möglich) *</label>
+        <input id="kunde-email" type="email" required placeholder="z. B. max@beispiel.de">
+        <div id="err-email" class="field-error"></div>
       </div>
 
       <div class="field">
-        <label for="abholwunsch">Wunsch-Abholzeit *</label>
-        <input id="abholwunsch" type="text" placeholder="z. B. schnellstmöglich oder 18:30 Uhr">
+        <label for="abholwunsch">Wunsch-Abholzeit (optional)</label>
+        <input id="abholwunsch" type="time">
+        <div id="err-zeit" class="field-error"></div>
       </div>
 
       <div class="field">
         <label for="artikel">Deine Bestellung (Gerichte, Saucen, Extras) *</label>
-        <textarea id="artikel" required placeholder="z. B. 2x Döner mit allem und scharf, 1x Falafel-Teller..."></textarea>
+        <textarea id="artikel" required minlength="3" maxlength="800" placeholder="z. B. 2x Döner mit allem und scharf, 1x Falafel-Teller..."></textarea>
+        <div id="err-artikel" class="field-error"></div>
       </div>
 
       <div class="field">
-        <label for="hinweis">Zusätzliche Hinweise</label>
-        <input id="hinweis" type="text" placeholder="z. B. ohne Zwiebeln, extra Zaziki">
+        <label for="hinweis">Zusätzliche Hinweise (optional)</label>
+        <input id="hinweis" type="text" maxlength="250" placeholder="z. B. ohne Zwiebeln, extra Zaziki">
       </div>
 
-      <button type="submit" id="submit-btn" class="btn">
+      <button type="submit" id="submit-btn" class="btn" disabled>
         <i class="fa-solid fa-paper-plane"></i> Bestellung absenden
       </button>
     </form>
@@ -125,6 +150,8 @@
     getFirestore,
     collection,
     addDoc,
+    doc,
+    onSnapshot,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
@@ -145,20 +172,83 @@
   const submitBtn = document.getElementById("submit-btn");
   const statusBox = document.getElementById("status-box");
 
+  const nameInput = document.getElementById("kunde-name");
+  const emailInput = document.getElementById("kunde-email");
+  const zeitInput = document.getElementById("abholwunsch");
+  const artikelInput = document.getElementById("artikel");
+  const hinweisInput = document.getElementById("hinweis");
+
+  const errName = document.getElementById("err-name");
+  const errEmail = document.getElementById("err-email");
+  const errArtikel = document.getElementById("err-artikel");
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function validateFields(showMessages = false) {
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+    const artikelVal = artikelInput.value.trim();
+
+    let nameOk = nameVal.length >= 2 && !/^\d+$/.test(nameVal);
+    let emailOk = emailRegex.test(emailVal);
+    let artikelOk = artikelVal.length >= 3;
+
+    if (showMessages) {
+      errName.textContent = nameOk ? "" : "Bitte gib deinen Namen ein (mindestens 2 Buchstaben).";
+      nameInput.classList.toggle("invalid", !nameOk);
+
+      errEmail.textContent = emailOk ? "" : "Bitte gib eine gültige E-Mail-Adresse ein (z. B. name@mail.de).";
+      emailInput.classList.toggle("invalid", !emailOk);
+
+      errArtikel.textContent = artikelOk ? "" : "Bitte gib mindestens ein Gericht ein.";
+      artikelInput.classList.toggle("invalid", !artikelOk);
+    }
+
+    const allValid = nameOk && emailOk && artikelOk;
+    submitBtn.disabled = !allValid;
+    return allValid;
+  }
+
+  [nameInput, emailInput, artikelInput].forEach((el) => {
+    el.addEventListener("input", () => validateFields(false));
+    el.addEventListener("blur", () => validateFields(true));
+  });
+
+  let stopTracking = null;
+
+  function trackOrder(orderId, shortCode) {
+    if (stopTracking) stopTracking();
+    stopTracking = onSnapshot(doc(db, "bestellungen", orderId), (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+
+      if (data.status === "neu") {
+        statusBox.className = "status-box wait";
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill. Lass diese Seite gerne kurz offen für das Live-Update.`;
+      } else if (data.status === "angenommen") {
+        statusBox.className = "status-box ok";
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Abholbereit um: <strong>${data.abholzeit || "schnellstmöglich"}</strong>.`;
+      } else if (data.status === "abgelehnt") {
+        statusBox.className = "status-box err";
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} leider abgelehnt.</strong><br>Bitte ruf uns bei Fragen kurz an.`;
+      }
+    });
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    submitBtn.disabled = true;
-    statusBox.className = "status-box";
-    statusBox.textContent = "";
+    if (!validateFields(true)) return;
 
-    const kunde_name = document.getElementById("kunde-name").value.trim();
-    const kunde_kontakt = document.getElementById("kunde-kontakt").value.trim();
-    const abholwunsch = document.getElementById("abholwunsch").value.trim();
-    const artikel = document.getElementById("artikel").value.trim();
-    const hinweis = document.getElementById("hinweis").value.trim();
+    submitBtn.disabled = true;
+
+    const kunde_name = nameInput.value.trim();
+    const kunde_kontakt = emailInput.value.trim().toLowerCase();
+    const abholwunsch = zeitInput.value.trim();
+    const artikel = artikelInput.value.trim();
+    const hinweis = hinweisInput.value.trim();
 
     try {
-      await addDoc(collection(db, "bestellungen"), {
+      const docRef = await addDoc(collection(db, "bestellungen"), {
         kunde_name,
         kunde_kontakt,
         abholwunsch,
@@ -169,15 +259,15 @@
         created_at: serverTimestamp()
       });
 
+      const shortCode = docRef.id.slice(0, 5).toUpperCase();
       form.reset();
-      statusBox.className = "status-box ok";
-      statusBox.textContent = "Vielen Dank! Deine Bestellung ist eingegangen und wird jetzt im Marktgrill geprüft.";
+      validateFields(false);
+      trackOrder(docRef.id, shortCode);
     } catch (err) {
       console.error(err);
       statusBox.className = "status-box err";
       statusBox.textContent = "Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut oder ruf uns direkt an.";
-    } finally {
-      submitBtn.disabled = false;
+      validateFields(false);
     }
   });
 </script>
