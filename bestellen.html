@@ -10,50 +10,141 @@
 <link rel="stylesheet" href="style.css?v=3">
 <style>
   .order-wrap {
-    max-width: 680px;
-    margin: 48px auto;
-    padding: 0 20px 64px;
+    max-width: 820px;
+    margin: 40px auto;
+    padding: 0 18px 72px;
   }
-  .order-card {
-    background: rgba(24, 22, 20, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .order-card, .menu-cat-card, .summary-card {
+    background: rgba(24, 22, 20, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.11);
     border-radius: 18px;
-    padding: 28px;
+    padding: 24px;
+  }
+  .menu-cats {
+    display: grid;
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .menu-cat-card h2 {
+    margin: 0 0 14px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dish-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap;
+  }
+  .dish-row:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+  .dish-info {
+    flex: 1 1 260px;
+  }
+  .dish-name {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .dish-desc {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.72);
+    margin-top: 3px;
+  }
+  .dish-price {
+    font-weight: 700;
+    margin-top: 4px;
+    font-size: 0.94rem;
+  }
+  .dish-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .variant-select, .item-note-input, .field input {
+    padding: 9px 11px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(13, 12, 11, 0.9);
+    color: #fff;
+    font: inherit;
+    box-sizing: border-box;
+  }
+  .qty-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .qty-count {
+    min-width: 22px;
+    text-align: center;
+    font-weight: 700;
+  }
+  .summary-card {
+    margin-top: 24px;
+  }
+  .cart-item {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(13, 12, 11, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 10px;
+  }
+  .cart-item-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .item-note-input {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  .total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.15rem;
+    font-weight: 800;
+    padding: 14px 0 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    margin-top: 12px;
   }
   .form-grid {
     display: grid;
-    gap: 16px;
-    margin-top: 20px;
+    gap: 14px;
+    margin-top: 16px;
   }
   .field label {
     display: block;
     margin-bottom: 6px;
     font-weight: 500;
   }
-  .field input,
-  .field textarea {
+  .field input {
     width: 100%;
     padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(13, 12, 11, 0.85);
-    color: #fff;
-    font: inherit;
-    box-sizing: border-box;
   }
-  .field input.invalid,
-  .field textarea.invalid {
+  .field input.invalid {
     border-color: #ef4444;
   }
   .field-error {
     color: #fca5a5;
     font-size: 0.88rem;
-    margin-top: 5px;
+    margin-top: 4px;
     min-height: 1.1em;
-  }
-  .field textarea {
-    min-height: 110px;
-    resize: vertical;
   }
   #submit-btn:disabled {
     opacity: 0.45;
@@ -63,7 +154,6 @@
     font-size: 0.86rem;
     color: rgba(255, 255, 255, 0.72);
     line-height: 1.45;
-    margin-top: 4px;
   }
   .dsgvo-note a {
     color: #fff;
@@ -86,24 +176,9 @@
     display: none;
     line-height: 1.5;
   }
-  .status-box.ok {
-    display: block;
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.45);
-    color: #bbf7d0;
-  }
-  .status-box.wait {
-    display: block;
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.45);
-    color: #fde68a;
-  }
-  .status-box.err {
-    display: block;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.45);
-    color: #fecaca;
-  }
+  .status-box.ok { display: block; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.45); color: #bbf7d0; }
+  .status-box.wait { display: block; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.45); color: #fde68a; }
+  .status-box.err { display: block; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.45); color: #fecaca; }
   .top-nav {
     display: flex;
     justify-content: space-between;
@@ -122,8 +197,8 @@
   </div>
 
   <div class="order-card">
-    <h1 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Jetzt bestellen</h1>
-    <p class="lead">Alle mit * markierten Felder sind Pflichtfelder. Die Rückmeldung erfolgt per E-Mail und direkt hier auf der Seite.</p>
+    <h1 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0;">Jetzt bestellen</h1>
+    <p class="lead">Wähle deine Gerichte aus der aktuellen Speisekarte aus, füge bei Bedarf eine Notiz pro Gericht hinzu und sende deine Bestellung ab.</p>
 
     <div id="stop-box" class="stop-box">
       <strong><i class="fa-solid fa-circle-pause"></i> Heute keine Online-Bestellungen möglich.</strong><br>
@@ -131,49 +206,58 @@
       <a href="tel:+4925249293606" style="color:#fff;font-weight:700;">+49 2524 9293606</a>.
     </div>
 
-    <form id="order-form" class="form-grid" novalidate>
-      <div class="field">
-        <label for="kunde-name">Dein Name *</label>
-        <input id="kunde-name" type="text" required minlength="2" maxlength="60" placeholder="z. B. Max Mustermann">
-        <div id="err-name" class="field-error"></div>
+    <div id="order-content">
+      <div id="menu-cats" class="menu-cats">
+        <p>Speisekarte wird geladen...</p>
       </div>
 
-      <div class="field">
-        <label for="kunde-email">Deine E-Mail-Adresse (nur E-Mail möglich) *</label>
-        <input id="kunde-email" type="email" required placeholder="z. B. max@beispiel.de">
-        <div id="err-email" class="field-error"></div>
+      <div class="summary-card">
+        <h2 style="margin: 0 0 12px; font-size: 1.3rem;">Deine Zusammenfassung</h2>
+        <div id="cart-items">
+          <p style="color: rgba(255,255,255,0.65); margin: 0;">Noch keine Gerichte ausgewählt.</p>
+        </div>
+
+        <div class="total-line">
+          <span>Gesamtpreis</span>
+          <span id="total-price">0,00 €</span>
+        </div>
+        <div id="err-cart" class="field-error"></div>
+
+        <form id="order-form" class="form-grid" novalidate>
+          <div class="field">
+            <label for="kunde-name">Dein Name *</label>
+            <input id="kunde-name" type="text" required minlength="2" maxlength="60" placeholder="z. B. Max Mustermann">
+            <div id="err-name" class="field-error"></div>
+          </div>
+
+          <div class="field">
+            <label for="kunde-email">Deine E-Mail-Adresse (nur E-Mail möglich) *</label>
+            <input id="kunde-email" type="email" required placeholder="z. B. max@beispiel.de">
+            <div id="err-email" class="field-error"></div>
+          </div>
+
+          <div class="field">
+            <label for="abholwunsch">Wunsch-Abholzeit (optional)</label>
+            <input id="abholwunsch" type="time">
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn" disabled>
+            <i class="fa-solid fa-paper-plane"></i> Bestellung absenden
+          </button>
+
+          <p class="dsgvo-note">
+            Mit dem Absenden stimmst du der Verarbeitung deiner Angaben zur Bestellabwicklung gemäß unserer
+            <a href="datenschutz.html">Datenschutzerklärung</a> zu.
+          </p>
+        </form>
       </div>
-
-      <div class="field">
-        <label for="abholwunsch">Wunsch-Abholzeit (optional)</label>
-        <input id="abholwunsch" type="time">
-      </div>
-
-      <div class="field">
-        <label for="artikel">Deine Bestellung (Gerichte, Saucen, Extras) *</label>
-        <textarea id="artikel" required minlength="3" maxlength="800" placeholder="z. B. 2x Döner mit allem und scharf, 1x Falafel-Teller..."></textarea>
-        <div id="err-artikel" class="field-error"></div>
-      </div>
-
-      <div class="field">
-        <label for="hinweis">Zusätzliche Hinweise (optional)</label>
-        <input id="hinweis" type="text" maxlength="250" placeholder="z. B. ohne Zwiebeln, extra Zaziki">
-      </div>
-
-      <button type="submit" id="submit-btn" class="btn" disabled>
-        <i class="fa-solid fa-paper-plane"></i> Bestellung absenden
-      </button>
-
-      <p class="dsgvo-note">
-        Mit dem Absenden stimmst du der Verarbeitung deiner Angaben zur Bestellabwicklung gemäß unserer
-        <a href="datenschutz.html">Datenschutzerklärung</a> zu.
-      </p>
-    </form>
+    </div>
 
     <div id="status-box" class="status-box"></div>
   </div>
 </main>
 
+<script src="script.js?v=3"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
   import {
@@ -198,57 +282,231 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  const menuCatsEl = document.getElementById("menu-cats");
+  const cartItemsEl = document.getElementById("cart-items");
+  const totalPriceEl = document.getElementById("total-price");
+  const orderContentEl = document.getElementById("order-content");
+  const stopBoxEl = document.getElementById("stop-box");
   const form = document.getElementById("order-form");
-  const stopBox = document.getElementById("stop-box");
   const submitBtn = document.getElementById("submit-btn");
   const statusBox = document.getElementById("status-box");
 
   const nameInput = document.getElementById("kunde-name");
   const emailInput = document.getElementById("kunde-email");
   const zeitInput = document.getElementById("abholwunsch");
-  const artikelInput = document.getElementById("artikel");
-  const hinweisInput = document.getElementById("hinweis");
 
   const errName = document.getElementById("err-name");
   const errEmail = document.getElementById("err-email");
-  const errArtikel = document.getElementById("err-artikel");
+  const errCart = document.getElementById("err-cart");
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const safeEsc = (str = "") =>
+    typeof window.esc === "function"
+      ? window.esc(str)
+      : String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+
+  // Zerlegt z. B. "klein 8,00 € / groß 10,00 €" oder "8,50 €" in auswählbare Varianten
+  function parsePriceOptions(priceStr = "") {
+    const clean = String(priceStr).trim();
+    const parts = clean.split("/").map((p) => p.trim()).filter(Boolean);
+    return parts.map((part, idx) => {
+      const match = part.match(/(\d+(?:[.,]\d{1,2})?)\s*€?/);
+      const amount = match ? parseFloat(match[1].replace(",", ".")) : null;
+      const labelMatch = part.match(/^(klein|groß|gross|mittel)/i);
+      const variantName = labelMatch ? labelMatch[1] : (parts.length > 1 ? `Option ${idx + 1}` : "");
+      return {
+        label: variantName ? `${variantName} (${part.includes("€") ? part : part + " €"})` : (part.includes("€") ? part : part + " €"),
+        shortVariant: variantName,
+        amount: Number.isFinite(amount) ? amount : null
+      };
+    });
+  }
+
+  function formatEuro(num) {
+    return num.toFixed(2).replace(".", ",") + " €";
+  }
+
+  // Warenkorb-Map: key -> { name, variantLabel, unitPrice, qty, note }
+  const cart = new Map();
+  let menuData = [];
 
   onSnapshot(doc(db, "einstellungen", "shop"), (snap) => {
     const paused = snap.exists() && snap.data().bestellstopp === true;
-    stopBox.style.display = paused ? "block" : "none";
-    form.style.display = paused ? "none" : "grid";
+    stopBoxEl.style.display = paused ? "block" : "none";
+    orderContentEl.style.display = paused ? "none" : "block";
   });
 
-  function validateFields(showMessages = false) {
+  async function loadMenu() {
+    try {
+      const res = await fetch("speisekarte.json?t=" + Date.now());
+      const data = await res.json();
+      menuData = Array.isArray(data.kategorien) ? data.kategorien : [];
+      renderMenu();
+    } catch (e) {
+      menuCatsEl.innerHTML = '<p style="color:#fca5a5;">Die Speisekarte konnte nicht geladen werden.</p>';
+    }
+  }
+
+  function renderMenu() {
+    menuCatsEl.innerHTML = menuData.map((cat, catIdx) => {
+      const dishes = Array.isArray(cat.gerichte) ? cat.gerichte : [];
+      return `
+        <section class="menu-cat-card">
+          <h2><i class="fa-solid fa-${safeEsc(cat.icon || "utensils")}"></i>${safeEsc(cat.titel || "")}</h2>
+          ${cat.hinweis ? `<p class="dish-desc" style="margin-bottom:10px;">${safeEsc(cat.hinweis)}</p>` : ""}
+          ${dishes.map((dish, dishIdx) => {
+            const options = parsePriceOptions(dish.preis);
+            const itemKey = `${catIdx}-${dishIdx}`;
+            const selectHtml = options.length > 1
+              ? `<select class="variant-select" data-variant-for="${itemKey}">
+                  ${options.map((opt, oIdx) => `<option value="${oIdx}">${safeEsc(opt.label)}</option>`).join("")}
+                 </select>`
+              : "";
+
+            return `
+              <div class="dish-row" data-item-key="${itemKey}" data-dish-name="${safeEsc(dish.name)}" data-cat-idx="${catIdx}" data-dish-idx="${dishIdx}">
+                <div class="dish-info">
+                  <div class="dish-name">${safeEsc(dish.name)}</div>
+                  ${dish.beschreibung ? `<div class="dish-desc">${safeEsc(dish.beschreibung)}</div>` : ""}
+                  <div class="dish-price">${safeEsc(dish.preis || "")}</div>
+                </div>
+                <div class="dish-controls">
+                  ${selectHtml}
+                  <button type="button" class="qty-btn" data-delta="-1" aria-label="Weniger">−</button>
+                  <span class="qty-count" id="qty-badge-${itemKey}">0</span>
+                  <button type="button" class="qty-btn" data-delta="1" aria-label="Mehr">+</button>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </section>
+      `;
+    }).join("");
+
+    menuCatsEl.querySelectorAll(".dish-row").forEach((row) => {
+      const itemKey = row.getAttribute("data-item-key");
+      const catIdx = Number(row.getAttribute("data-cat-idx"));
+      const dishIdx = Number(row.getAttribute("data-dish-idx"));
+      const dish = menuData[catIdx]?.gerichte?.[dishIdx];
+      if (!dish) return;
+
+      const options = parsePriceOptions(dish.preis);
+      const selectEl = row.querySelector(`[data-variant-for="${itemKey}"]`);
+
+      row.querySelectorAll(".qty-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const delta = Number(btn.getAttribute("data-delta"));
+          const optIdx = selectEl ? Number(selectEl.value) : 0;
+          const chosenOpt = options[optIdx] || { label: dish.preis || "", shortVariant: "", amount: null };
+          const cartKey = `${itemKey}__${optIdx}`;
+
+          const existing = cart.get(cartKey);
+          const nextQty = (existing ? existing.qty : 0) + delta;
+
+          if (nextQty <= 0) {
+            cart.delete(cartKey);
+          } else {
+            cart.set(cartKey, {
+              name: dish.name,
+              variant: chosenOpt.shortVariant,
+              priceLabel: chosenOpt.label,
+              unitPrice: chosenOpt.amount,
+              qty: nextQty,
+              note: existing ? existing.note : ""
+            });
+          }
+
+          updateDishBadges();
+          renderCart();
+          validateForm(false);
+        });
+      });
+    });
+  }
+
+  function updateDishBadges() {
+    const totalsPerRow = new Map();
+    for (const [cartKey, entry] of cart.entries()) {
+      const rowKey = cartKey.split("__")[0];
+      totalsPerRow.set(rowKey, (totalsPerRow.get(rowKey) || 0) + entry.qty);
+    }
+    document.querySelectorAll(".qty-count").forEach((badge) => {
+      const rowKey = badge.id.replace("qty-badge-", "");
+      badge.textContent = String(totalsPerRow.get(rowKey) || 0);
+    });
+  }
+
+  function renderCart() {
+    if (cart.size === 0) {
+      cartItemsEl.innerHTML = '<p style="color: rgba(255,255,255,0.65); margin: 0;">Noch keine Gerichte ausgewählt.</p>';
+      totalPriceEl.textContent = "0,00 €";
+      return;
+    }
+
+    let sum = 0;
+    let hasUnknownPrice = false;
+    const html = [];
+
+    for (const [cartKey, entry] of cart.entries()) {
+      const lineTotal = typeof entry.unitPrice === "number" ? entry.unitPrice * entry.qty : null;
+      if (typeof lineTotal === "number") {
+        sum += lineTotal;
+      } else {
+        hasUnknownPrice = true;
+      }
+
+      const titleText = entry.variant ? `${entry.qty}× ${entry.name} (${entry.variant})` : `${entry.qty}× ${entry.name}`;
+      const priceText = typeof lineTotal === "number" ? formatEuro(lineTotal) : safeEsc(entry.priceLabel);
+
+      html.push(`
+        <div class="cart-item" data-cart-key="${safeEsc(cartKey)}">
+          <div class="cart-item-top">
+            <span>${safeEsc(titleText)}</span>
+            <span>${priceText}</span>
+          </div>
+          <input type="text" class="item-note-input" maxlength="160" placeholder="Notiz zu diesem Gericht (z. B. ohne Zwiebeln, extra scharf)" value="${safeEsc(entry.note)}">
+        </div>
+      `);
+    }
+
+    cartItemsEl.innerHTML = html.join("");
+    totalPriceEl.textContent = hasUnknownPrice ? `${formatEuro(sum)} (+ Preis auf Anfrage)` : formatEuro(sum);
+
+    cartItemsEl.querySelectorAll(".item-note-input").forEach((input) => {
+      input.addEventListener("input", (e) => {
+        const parent = e.target.closest(".cart-item");
+        const key = parent?.getAttribute("data-cart-key");
+        if (key && cart.has(key)) {
+          cart.get(key).note = e.target.value;
+        }
+      });
+    });
+  }
+
+  function validateForm(showMessages = false) {
+    const hasItems = cart.size > 0;
     const nameVal = nameInput.value.trim();
     const emailVal = emailInput.value.trim();
-    const artikelVal = artikelInput.value.trim();
 
     const nameOk = nameVal.length >= 2 && !/^\d+$/.test(nameVal);
     const emailOk = emailRegex.test(emailVal);
-    const artikelOk = artikelVal.length >= 3;
 
     if (showMessages) {
+      errCart.textContent = hasItems ? "" : "Bitte wähle mindestens ein Gericht aus.";
       errName.textContent = nameOk ? "" : "Bitte gib deinen Namen ein (mindestens 2 Buchstaben).";
       nameInput.classList.toggle("invalid", !nameOk);
-
       errEmail.textContent = emailOk ? "" : "Bitte gib eine gültige E-Mail-Adresse ein (z. B. name@mail.de).";
       emailInput.classList.toggle("invalid", !emailOk);
-
-      errArtikel.textContent = artikelOk ? "" : "Bitte gib mindestens ein Gericht ein.";
-      artikelInput.classList.toggle("invalid", !artikelOk);
     }
 
-    const allValid = nameOk && emailOk && artikelOk;
+    const allValid = hasItems && nameOk && emailOk;
     submitBtn.disabled = !allValid;
     return allValid;
   }
 
-  [nameInput, emailInput, artikelInput].forEach((el) => {
-    el.addEventListener("input", () => validateFields(false));
-    el.addEventListener("blur", () => validateFields(true));
+  [nameInput, emailInput].forEach((el) => {
+    el.addEventListener("input", () => validateForm(false));
+    el.addEventListener("blur", () => validateForm(true));
   });
 
   let stopTracking = null;
@@ -264,10 +522,10 @@
         statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill.`;
       } else if (data.status === "angenommen") {
         statusBox.className = "status-box ok";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Voraussichtliche Abholzeit: <strong>${data.abholzeit || "schnellstmöglich"}</strong>.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Voraussichtliche Abholzeit: <strong>${safeEsc(data.abholzeit || "schnellstmöglich")}</strong>.`;
       } else if (data.status === "abholbereit") {
         statusBox.className = "status-box ok";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} ist jetzt abholbereit!</strong><br>Du kannst sie jetzt direkt im Marktgrill abholen.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} ist jetzt abholbereit!</strong><br>Du kannst sie jetzt direkt im Marktgrill Ennigerloh abholen.`;
       } else if (data.status === "abgelehnt") {
         statusBox.className = "status-box err";
         statusBox.innerHTML = `<strong>Bestellung #${shortCode} leider abgelehnt.</strong><br>Bitte ruf uns bei Fragen kurz an unter <a href="tel:+4925249293606" style="color:#fff;">+49 2524 9293606</a>.`;
@@ -277,33 +535,61 @@
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!validateFields(true)) return;
+    if (!validateForm(true)) return;
 
     submitBtn.disabled = true;
+
+    let sum = 0;
+    const summaryLines = [];
+    const itemsArray = [];
+
+    for (const entry of cart.values()) {
+      const cleanNote = entry.note.trim();
+      const variantPart = entry.variant ? ` (${entry.variant})` : "";
+      const notePart = cleanNote ? ` [Notiz: ${cleanNote}]` : "";
+      summaryLines.push(`${entry.qty}× ${entry.name}${variantPart}${notePart}`);
+      itemsArray.push({
+        name: entry.name,
+        variant: entry.variant || "",
+        qty: entry.qty,
+        unitPrice: entry.unitPrice,
+        note: cleanNote
+      });
+      if (typeof entry.unitPrice === "number") {
+        sum += entry.unitPrice * entry.qty;
+      }
+    }
 
     try {
       const docRef = await addDoc(collection(db, "bestellungen"), {
         kunde_name: nameInput.value.trim(),
         kunde_kontakt: emailInput.value.trim().toLowerCase(),
         abholwunsch: zeitInput.value.trim(),
-        artikel: artikelInput.value.trim(),
-        hinweis: hinweisInput.value.trim(),
+        artikel: summaryLines.join(" | "),
+        positionen: itemsArray,
+        gesamtpreis: formatEuro(sum),
+        hinweis: "",
         status: "neu",
         abholzeit: "",
         created_at: serverTimestamp()
       });
 
       const shortCode = docRef.id.slice(0, 5).toUpperCase();
+      cart.clear();
+      updateDishBadges();
+      renderCart();
       form.reset();
-      validateFields(false);
+      validateForm(false);
       trackOrder(docRef.id, shortCode);
     } catch (err) {
       console.error(err);
       statusBox.className = "status-box err";
       statusBox.textContent = "Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut oder ruf uns an.";
-      validateFields(false);
+      validateForm(false);
     }
   });
+
+  loadMenu();
 </script>
 </body>
 </html>
