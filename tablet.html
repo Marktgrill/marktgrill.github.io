@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bestell-Tablet | Marktgrill Ennigerloh</title>
+<meta name="theme-color" content="#0d0c0b">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="style.css?v=3">
+<style>
+  .tablet-wrap {
+    max-width: 920px;
+    margin: 32px auto;
+    padding: 0 18px 64px;
+  }
+  .login-box, .order-item {
+    background: rgba(24, 22, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .login-box {
+    max-width: 420px;
+    margin: 60px auto;
+    display: grid;
+    gap: 14px;
+  }
+  .login-box input, .pickup-input {
+    padding: 11px 13px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(13, 12, 11, 0.9);
+    color: #fff;
+    font: inherit;
+  }
+  .orders-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge.neu { background: #f59e0b; color: #111; }
+  .badge.angenommen { background: #22c55e; color: #111; }
+  .badge.abgelehnt { background: #ef4444; color: #fff; }
+  .order-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    align-items: center;
+  }
+  .btn-accept {
+    background: #22c55e;
+    color: #0d0c0b;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-reject {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+<main class="tablet-wrap">
+  <div id="login-section" class="login-box">
+    <h1 class="display" style="font-size: 1.7rem;">Tablet-Login</h1>
+    <p class="lead" style="margin: 0;">Mit deinem Firebase-Nutzerkonto anmelden.</p>
+    <input id="email" type="email" placeholder="Tablet-E-Mail" autocomplete="username">
+    <input id="password" type="password" placeholder="Passwort" autocomplete="current-password">
+    <button id="login-btn" class="btn"><i class="fa-solid fa-right-to-bracket"></i> Anmelden</button>
+    <p id="login-error" style="color: #fca5a5; margin: 0;"></p>
+  </div>
+
+  <div id="dashboard-section" style="display: none;">
+    <div class="toolbar">
+      <h1 class="display" style="font-size: 2rem; margin: 0;">Live-Bestellungen</h1>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="sound-btn" class="btn ghost"><i class="fa-solid fa-volume-high"></i> Ton aktivieren</button>
+        <button id="logout-btn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> Abmelden</button>
+      </div>
+    </div>
+    <div id="orders-list" class="orders-list"></div>
+  </div>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    query,
+    orderBy,
+    onSnapshot,
+    doc,
+    updateDoc
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPpEbNXXcPVNlW18h1v5av2IXwpXWiW5I",
+    authDomain: "marktgrill-ennigerloh.firebaseapp.com",
+    projectId: "marktgrill-ennigerloh",
+    storageBucket: "marktgrill-ennigerloh.firebasestorage.app",
+    messagingSenderId: "798938174154",
+    appId: "1:798938174154:web:6b95541d76a64bf0fe1a33",
+    measurementId: "G-ENG9C5LR8T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const loginSection = document.getElementById("login-section");
+  const dashboardSection = document.getElementById("dashboard-section");
+  const ordersList = document.getElementById("orders-list");
+  const loginError = document.getElementById("login-error");
+
+  let soundEnabled = false;
+  let knownNewIds = new Set();
+  let initialLoadDone = false;
+  let unsubscribeOrders = null;
+
+  function playBeep() {
+    if (!soundEnabled) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 880;
+      gain.gain.value = 0.2;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } catch (_) {}
+  }
+
+  document.getElementById("sound-btn").addEventListener("click", () => {
+    soundEnabled = true;
+    playBeep();
+    document.getElementById("sound-btn").innerHTML = '<i class="fa-solid fa-check"></i> Ton aktiv';
+  });
+
+  document.getElementById("login-btn").addEventListener("click", async () => {
+    loginError.textContent = "";
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      loginError.textContent = "Login fehlgeschlagen. Bitte E-Mail und Passwort prüfen.";
+    }
+  });
+
+  document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginSection.style.display = "none";
+      dashboardSection.style.display = "block";
+      startListening();
+    } else {
+      if (unsubscribeOrders) unsubscribeOrders();
+      loginSection.style.display = "grid";
+      dashboardSection.style.display = "none";
+    }
+  });
+
+  function escapeHtml(str = "") {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  }
+
+  function startListening() {
+    const q = query(collection(db, "bestellungen"), orderBy("created_at", "desc"));
+    unsubscribeOrders = onSnapshot(q, (snapshot) => {
+      let hasBrandNewOrder = false;
+      const items = [];
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const id = docSnap.id;
+        items.push({ id, ...data });
+
+        if (data.status === "neu" && !knownNewIds.has(id)) {
+          knownNewIds.add(id);
+          if (initialLoadDone) hasBrandNewOrder = true;
+        }
+      });
+
+      initialLoadDone = true;
+      if (hasBrandNewOrder) playBeep();
+      renderOrders(items);
+    });
+  }
+
+  function renderOrders(orders) {
+    if (!orders.length) {
+      ordersList.innerHTML = '<div class="order-item">Noch keine Bestellungen vorhanden.</div>';
+      return;
+    }
+
+    ordersList.innerHTML = orders.map((o) => {
+      const status = o.status || "neu";
+      return `
+        <div class="order-item" data-id="${escapeHtml(o.id)}">
+          <div class="order-top">
+            <strong>${escapeHtml(o.kunde_name || "Gast")} · ${escapeHtml(o.kunde_kontakt || "")}</strong>
+            <span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span>
+          </div>
+          <div><strong>Bestellung:</strong> ${escapeHtml(o.artikel || "")}</div>
+          ${o.abholwunsch ? `<div><strong>Wunsch-Abholzeit:</strong> ${escapeHtml(o.abholwunsch)}</div>` : ""}
+          ${o.hinweis ? `<div><strong>Hinweis:</strong> ${escapeHtml(o.hinweis)}</div>` : ""}
+          ${o.abholzeit ? `<div><strong>Bestätigte Abholzeit:</strong> ${escapeHtml(o.abholzeit)}</div>` : ""}
+
+          <div class="order-actions">
+            <input type="text" class="pickup-input" placeholder="Abholzeit (z. B. 18:45)" value="${escapeHtml(o.abholzeit || "")}">
+            <button type="button" class="btn-accept" data-action="accept">Annehmen</button>
+            <button type="button" class="btn-reject" data-action="reject">Ablehnen</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    ordersList.querySelectorAll(".order-item").forEach((card) => {
+      const id = card.getAttribute("data-id");
+      const pickupInput = card.querySelector(".pickup-input");
+
+      card.querySelector('[data-action="accept"]').addEventListener("click", async () => {
+        const abholzeit = pickupInput.value.trim() || "schnellstmöglich";
+        await updateDoc(doc(db, "bestellungen", id), {
+          status: "angenommen",
+          abholzeit
+        });
+      });
+
+      card.querySelector('[data-action="reject"]').addEventListener("click", async () => {
+        await updateDoc(doc(db, "bestellungen", id), {
+          status: "abgelehnt"
+        });
+      });
+    });
+  }
+</script>
+</body>
+</html>

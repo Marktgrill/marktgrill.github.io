@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Online bestellen | Marktgrill Ennigerloh</title>
+<meta name="theme-color" content="#0d0c0b">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="style.css?v=3">
+<style>
+  .order-wrap {
+    max-width: 680px;
+    margin: 48px auto;
+    padding: 0 20px 64px;
+  }
+  .order-card {
+    background: rgba(24, 22, 20, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .form-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(13, 12, 11, 0.85);
+    color: #fff;
+    font: inherit;
+    box-sizing: border-box;
+  }
+  .field textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+  .status-box {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    display: none;
+  }
+  .status-box.ok {
+    display: block;
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #bbf7d0;
+  }
+  .status-box.err {
+    display: block;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #fecaca;
+  }
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+<main class="order-wrap">
+  <div class="top-nav">
+    <a href="index.html" class="btn ghost"><i class="fa-solid fa-arrow-left"></i> Startseite</a>
+    <a href="speisekarte.html" class="btn ghost"><i class="fa-solid fa-utensils"></i> Speisekarte</a>
+  </div>
+
+  <div class="order-card">
+    <h1 class="display" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Jetzt bestellen</h1>
+    <p class="lead">Stelle deine Bestellung zusammen – wir melden uns direkt mit einer Abholzeit bei dir.</p>
+
+    <form id="order-form" class="form-grid">
+      <div class="field">
+        <label for="kunde-name">Dein Name *</label>
+        <input id="kunde-name" type="text" required placeholder="z. B. Max Mustermann">
+      </div>
+
+      <div class="field">
+        <label for="kunde-kontakt">Telefonnummer oder E-Mail *</label>
+        <input id="kunde-kontakt" type="text" required placeholder="z. B. 0170 1234567 oder name@mail.de">
+      </div>
+
+      <div class="field">
+        <label for="abholwunsch">Wunsch-Abholzeit</label>
+        <input id="abholwunsch" type="text" placeholder="z. B. schnellstmöglich oder 18:30 Uhr">
+      </div>
+
+      <div class="field">
+        <label for="artikel">Deine Bestellung (Gerichte, Saucen, Extras) *</label>
+        <textarea id="artikel" required placeholder="z. B. 2x Döner mit allem und scharf, 1x Falafel-Teller..."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="hinweis">Zusätzliche Hinweise</label>
+        <input id="hinweis" type="text" placeholder="z. B. ohne Zwiebeln, extra Zaziki">
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn">
+        <i class="fa-solid fa-paper-plane"></i> Bestellung absenden
+      </button>
+    </form>
+
+    <div id="status-box" class="status-box"></div>
+  </div>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPpEbNXXcPVNlW18h1v5av2IXwpXWiW5I",
+    authDomain: "marktgrill-ennigerloh.firebaseapp.com",
+    projectId: "marktgrill-ennigerloh",
+    storageBucket: "marktgrill-ennigerloh.firebasestorage.app",
+    messagingSenderId: "798938174154",
+    appId: "1:798938174154:web:6b95541d76a64bf0fe1a33",
+    measurementId: "G-ENG9C5LR8T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById("order-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const statusBox = document.getElementById("status-box");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    statusBox.className = "status-box";
+    statusBox.textContent = "";
+
+    const kunde_name = document.getElementById("kunde-name").value.trim();
+    const kunde_kontakt = document.getElementById("kunde-kontakt").value.trim();
+    const abholwunsch = document.getElementById("abholwunsch").value.trim();
+    const artikel = document.getElementById("artikel").value.trim();
+    const hinweis = document.getElementById("hinweis").value.trim();
+
+    try {
+      await addDoc(collection(db, "bestellungen"), {
+        kunde_name,
+        kunde_kontakt,
+        abholwunsch,
+        artikel,
+        hinweis,
+        status: "neu",
+        abholzeit: "",
+        created_at: serverTimestamp()
+      });
+
+      form.reset();
+      statusBox.className = "status-box ok";
+      statusBox.textContent = "Vielen Dank! Deine Bestellung ist eingegangen und wird jetzt im Marktgrill geprüft.";
+    } catch (err) {
+      console.error(err);
+      statusBox.className = "status-box err";
+      statusBox.textContent = "Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut oder ruf uns direkt an.";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
