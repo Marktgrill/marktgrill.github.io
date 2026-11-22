@@ -10,7 +10,7 @@ const PAGES=[
   ['bestellen.html','Bestellen'],
   ['tagesgericht.html','Tagesgericht'],
   ['catering.html','Catering'],
-  ['about.html','Über uns'],
+  ['about.html','Team'],
   ['contact.html','Kontakt']
 ];
 // Öffnungszeiten: Wochentag (0 = Sonntag) -> [von, bis] oder null = geschlossen
