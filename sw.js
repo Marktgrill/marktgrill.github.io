@@ -43,7 +43,7 @@ self.addEventListener('fetch', e => {
   const r = e.request;
   const u = new URL(r.url);
   
-  if (r.method !== 'GET' || u.origin !== location.origin || u.pathname.includes('/admin') || /\.mp4$/.test(u.pathname) || r.headers.has('range')) {
+  if (r.method !== 'GET' || u.origin !== location.origin || u.pathname.includes('/admin') || /\.(mp4|webm|mov|m4v)$/i.test(u.pathname) || r.headers.has('range')) {
     return;
   }
 
