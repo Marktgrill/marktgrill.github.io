@@ -585,7 +585,7 @@ html[data-theme="light"] .field-error { color: #b91c1c; }
 
       if (data.status === "neu") {
         statusBox.className = "status-box wait";
-        statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill.`;
+        statusBox.innerHTML = `<strong>Bestellung #${shortCode} eingegangen!</strong><br>Wir prüfen deine Bestellung gerade im Marktgrill. Bitte bleibe auf dieser Seite oder warte auf unsere E-Mail.`;
       } else if (data.status === "angenommen") {
         statusBox.className = "status-box ok";
         statusBox.innerHTML = `<strong>Bestellung #${shortCode} angenommen!</strong><br>Voraussichtliche Abholzeit: <strong>${safeEsc(data.abholzeit || "schnellstmöglich")}</strong>.`;
