@@ -1,0 +1,28 @@
+/* Marktgrill: Galerie der Catering-Seite (nur dort eingebunden) */
+.gallery-section{margin-top:70px}
+.gallery{columns:3 260px;column-gap:14px}
+.g-item{position:relative;display:block;width:100%;margin:0 0 14px;padding:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--surface);cursor:pointer;break-inside:avoid;transition:transform .3s,border-color .3s,box-shadow .3s}
+.g-item img,.g-item video{display:block;width:100%;height:auto}
+.g-item:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 20px 40px -20px var(--accent)}
+.g-cap{position:absolute;left:0;right:0;bottom:0;padding:36px 16px 14px;text-align:left;color:#fff;font:500 .92rem var(--font-b);background:linear-gradient(transparent,rgba(0,0,0,.72))}
+.g-badge{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:.85rem}
+
+.g-lightbox{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(8,7,6,.93);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:20px;animation:gfade .25s both}
+.g-lightbox[hidden]{display:none}
+@keyframes gfade{from{opacity:0}}
+.g-stage{max-width:min(1100px,100%);display:flex;justify-content:center}
+.g-stage img,.g-stage video{max-width:100%;max-height:78vh;border-radius:20px;object-fit:contain;background:#000}
+.g-caption{position:absolute;left:20px;right:20px;bottom:calc(24px + env(safe-area-inset-bottom));text-align:center;color:#fff;opacity:.9}
+.g-close,.g-nav{position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer}
+.g-close{top:calc(16px + env(safe-area-inset-top));right:16px}
+.g-nav{top:50%;transform:translateY(-50%)}
+.g-prev{left:14px}.g-next{right:14px}
+.g-close:hover,.g-nav:hover{background:var(--accent);border-color:var(--accent)}
+
+@media(max-width:600px){
+  .gallery-section{margin-top:44px}
+  .gallery{columns:2 140px;column-gap:10px}
+  .g-item{margin-bottom:10px;border-radius:18px}
+  .g-nav{display:none}
+}
+@media(prefers-reduced-motion:reduce){.g-item{transition:none}}
