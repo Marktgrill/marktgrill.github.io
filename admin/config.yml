@@ -55,3 +55,24 @@ collections:
                   - { label: "Name", name: "name", widget: "string" }
                   - { label: "Preis", name: "preis", widget: "string", hint: "z. B. 7,50 € oder klein 8,00 € / groß 10,00 €" }
                   - { label: "Beschreibung (optional)", name: "beschreibung", widget: "string", required: false }
+
+  - name: "galerie"
+    label: "Catering-Galerie"
+    media_folder: "images/galerie"
+    public_folder: "/images/galerie"
+    files:
+      - label: "Bilder & Videos"
+        name: "galerie"
+        file: "galerie.json"
+        format: "json"
+        fields:
+          - label: "Galerie"
+            name: "eintraege"
+            widget: "list"
+            label_singular: "Bild oder Video"
+            summary: "{{fields.titel}} {{fields.datei}}"
+            fields:
+              - { label: "Datei (Bild oder Video)", name: "datei", widget: "file", choose_url: false, hint: "Bilder: JPG, PNG oder WebP. Videos: MP4 (H.264), möglichst unter 20 MB." }
+              - { label: "Beschriftung (optional)", name: "titel", widget: "string", required: false }
+              - { label: "Video mit Ton abspielen?", name: "mit_ton", widget: "boolean", default: false, hint: "Nur für Videos. Aus = stummer Loop wie ein GIF. An = Video mit Bedienleiste und Ton." }
+              - { label: "Vorschaubild für Video (optional)", name: "vorschau", widget: "image", required: false, choose_url: false }
