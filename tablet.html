@@ -135,6 +135,72 @@
     gap: 12px;
     flex-wrap: wrap;
   }
+
+  /* Fix für helles Design (data-theme="light") */
+html[data-theme="light"] .order-card,
+html[data-theme="light"] .menu-cat-card,
+html[data-theme="light"] .summary-card,
+html[data-theme="light"] .login-box,
+html[data-theme="light"] .order-item,
+html[data-theme="light"] .stop-bar,
+html[data-theme="light"] .filter-bar,
+html[data-theme="light"] .stat-card {
+  background: #ffffff;
+  border-color: rgba(13, 12, 11, 0.14);
+  color: #161412;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .cart-item {
+  background: #f6f3ef;
+  border-color: rgba(13, 12, 11, 0.12);
+  color: #161412;
+}
+
+html[data-theme="light"] .variant-select,
+html[data-theme="light"] .item-note-input,
+html[data-theme="light"] .field input,
+html[data-theme="light"] .login-box input,
+html[data-theme="light"] .pickup-input {
+  background: #ffffff;
+  border-color: rgba(13, 12, 11, 0.22);
+  color: #161412;
+}
+
+html[data-theme="light"] .dish-desc,
+html[data-theme="light"] .dsgvo-note,
+html[data-theme="light"] .stat-label,
+html[data-theme="light"] #stop-status-text {
+  color: rgba(22, 20, 18, 0.72) !important;
+}
+
+html[data-theme="light"] .dsgvo-note a {
+  color: #161412;
+}
+
+html[data-theme="light"] .qty-btn,
+html[data-theme="light"] .filter-btn {
+  background: rgba(13, 12, 11, 0.06);
+  border-color: rgba(13, 12, 11, 0.18);
+  color: #161412;
+}
+
+html[data-theme="light"] .filter-btn.active {
+  background: #161412;
+  color: #ffffff;
+  border-color: #161412;
+}
+
+html[data-theme="light"] .dish-row,
+html[data-theme="light"] .total-line {
+  border-color: rgba(13, 12, 11, 0.12);
+}
+
+html[data-theme="light"] .status-box.ok { color: #14532d; background: rgba(34, 197, 94, 0.18); }
+html[data-theme="light"] .status-box.wait { color: #78350f; background: rgba(245, 158, 11, 0.22); }
+html[data-theme="light"] .status-box.err,
+html[data-theme="light"] .stop-box { color: #7f1d1d; background: rgba(239, 68, 68, 0.16); }
+html[data-theme="light"] .field-error { color: #b91c1c; }
 </style>
 </head>
 <body>
