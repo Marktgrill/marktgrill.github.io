@@ -204,6 +204,7 @@ html[data-theme="light"] .field-error { color: #b91c1c; }
 </style>
 </head>
 <body>
+<script src="script.js?v=3"></script>
 <main class="tablet-wrap">
   <div id="login-section" class="login-box">
     <h1 class="display" style="font-size: 1.7rem;">Tablet-Login</h1>
@@ -300,7 +301,7 @@ html[data-theme="light"] .field-error { color: #b91c1c; }
   };
 
   // Optionaler Endpunkt (z. B. eigener Serverless-Endpunkt für Brevo)
-  const MAIL_ENDPOINT_URL = "";
+  const MAIL_ENDPOINT_URL = "https://marktgrill-auth.marktgrillennigerloh.workers.dev";
 
   async function sendOrderEmail({ toEmail, customerName, orderIdShort, statusType, pickupTime }) {
     if (!toEmail || !MAIL_ENDPOINT_URL) return;
